@@ -1,5 +1,5 @@
 "use client"
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/app/Navbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
@@ -9,6 +9,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col bg-gradient-to-b from-background to-muted text-foreground">
       <Navbar />
+      
       <section className="relative h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-black text-white">
 
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,0,0,0.4),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(0,255,255,0.4),transparent_40%),radial-gradient(circle_at_top_right,rgba(0,255,0,0.3),transparent_40%)]" />
@@ -42,7 +43,10 @@ export default function HomePage() {
               variant="outline"
               className="border-cyan-400 text-cyan-300 hover:bg-cyan-400/10"
             >
-              List Your Store
+              
+            <Link href="/dashboard">
+            List Your Store
+            </Link>
             </Button>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
+import { ThemeSwitcher } from '../auth/theme-switcher'
 
 const Navbar = () => {
   return (
@@ -12,10 +13,8 @@ const Navbar = () => {
           <a href="#how" className="text-sm font-medium hover:text-primary">
             How It Works
           </a>
-          <a href="#partner" className="text-sm font-medium hover:text-primary">
-            For Vendors
-          </a>
         </div>
+        {/* <ThemeSwitcher/> */}
         <Button>Get Started</Button>
       </nav>
   )
