@@ -13,10 +13,8 @@ import {
   ClipboardList, 
   Settings, 
   User, 
-  Bell, 
-  LogOut,
+  Bell,
   Plus,
-  TrendingUp,
   Calendar
 } from 'lucide-react'
 import { LogoutButton } from '../auth/logout-button'
@@ -63,7 +61,7 @@ const quickActions = [
 const Sidebar = () => {
   const pathname = usePathname()
   useEffect(() => {
-    const user = getUser()
+    getUser()
   }, []);
   return (
     <div className="flex h-full w-60 flex-col bg-card border-r">

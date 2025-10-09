@@ -2,7 +2,7 @@
 import Navbar from "@/components/app/Navbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Gamepad2, Store, Wallet } from "lucide-react";
 
 export default function HomePage() {

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button } from '../ui/button'
-import { ThemeSwitcher } from '../auth/theme-switcher'
 
 const Navbar = () => {
   return (
