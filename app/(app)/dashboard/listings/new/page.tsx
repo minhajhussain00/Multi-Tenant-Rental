@@ -1,7 +1,7 @@
 "use client";
 
 import { addRentalSchema } from "@/lib/schemas/addRental";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/client";
 import { X, UploadCloud } from "lucide-react";
+import Image from "next/image";
 import z from "zod";
 
 const Page = () => {
@@ -211,9 +212,11 @@ const Page = () => {
                           key={index}
                           className="relative group rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-700"
                         >
-                          <img
+                          <Image
                             src={url}
                             alt={`Uploaded ${index + 1}`}
+                            width={128}
+                            height={128}
                             className="object-cover w-full h-32 transition-transform duration-200 group-hover:scale-105"
                           />
                           <button

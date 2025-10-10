@@ -1,7 +1,5 @@
 import Sidebar from '@/components/app/Sidebar';
 import React from 'react'
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 const layout = async ({
     children,
 }: Readonly<{
