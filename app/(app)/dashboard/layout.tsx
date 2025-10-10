@@ -7,15 +7,6 @@ const layout = async ({
 }: Readonly<{
     children: React.ReactNode;
 }>) => {
-    console.log("hi")
-      const supabase = await createClient();
-    
-      const { data, error } = await supabase.auth.getClaims();
-      console.log('data',data)
-      console.log("error",error)
-      if (error || !data?.claims) {
-        redirect("/auth/login");
-      }
     return (
     <div className="flex h-screen">
       <Sidebar />
