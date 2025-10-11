@@ -1,7 +1,7 @@
 "use client";
 
 import { addRentalSchema } from "@/lib/schemas/addRental";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/client";
 import { X, UploadCloud } from "lucide-react";
-import Image from "next/image";
 import z from "zod";
 
 const Page = () => {
@@ -26,72 +25,68 @@ const Page = () => {
     resolver: zodResolver(addRentalSchema),
   });
 
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [isUploading, setIsUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Upload images right when selected
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    if (files.length === 0) return;
+  // ✅ When user selects a file, show preview only (no upload yet)
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-    const totalImages = imageUrls.length + files.length;
-    if (totalImages > 3) {
-      form.setError("images", {
-        type: "manual",
-        message: "You can only upload up to 3 images.",
-      });
-      return;
-    }
-
+    setSelectedFile(file);
+    setPreviewUrl(URL.createObjectURL(file));
     form.clearErrors("images");
-    setIsUploading(true);
-
-    const uploadedUrls: string[] = [];
-
-    for (const file of files) {
-      const filePath = `public/${Date.now()}_${file.name}`;
-
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("pictures")
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-
-      if (uploadError) {
-        console.error("Upload error:", uploadError.message);
-        continue;
-      }
-
-      const { data: publicUrlData } = supabase.storage
-        .from("pictures")
-        .getPublicUrl(uploadData.path);
-
-      uploadedUrls.push(publicUrlData.publicUrl);
-    }
-
-    setImageUrls((prev) => [...prev, ...uploadedUrls]);
-    setIsUploading(false);
-
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const removeImage = (index: number) => {
-    setImageUrls((prev) => prev.filter((_, i) => i !== index));
+  // 🧹 Clean up object URL when component unmounts or image changes
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
+  // ❌ Remove selected image
+  const removeImage = () => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(null);
+    setSelectedFile(null);
   };
 
+  // 🧾 On Submit → upload image → insert rental record
   async function onSubmit(values: z.infer<typeof addRentalSchema>) {
-    if (imageUrls.length === 0) {
+    if (!selectedFile) {
       form.setError("images", {
         type: "manual",
-        message: "Please upload at least one image before submitting.",
+        message: "Please select an image before submitting.",
       });
       return;
     }
 
     setIsSubmitting(true);
+
+
+    const filePath = `public/${Date.now()}_${selectedFile.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("pictures")
+      .upload(filePath, selectedFile, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error("Error uploading image:", uploadError);
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Step 2: Get public URL
+    const { data: publicUrlData } = supabase.storage
+      .from("pictures")
+      .getPublicUrl(uploadData.path);
+
+    const imageUrl = publicUrlData.publicUrl;
 
     const { data, error } = await supabase
       .from("rentals")
@@ -99,7 +94,7 @@ const Page = () => {
         name: values.name,
         description: values.description,
         price_per_day: values.pricePerDay,
-        images: imageUrls,
+        images: [imageUrl],
       })
       .select()
       .single();
@@ -111,7 +106,7 @@ const Page = () => {
     } else {
       console.log("Rental added:", data);
       form.reset();
-      setImageUrls([]);
+      removeImage();
     }
   }
 
@@ -128,7 +123,7 @@ const Page = () => {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-
+                {/* Name */}
                 <FormField
                   control={form.control}
                   name="name"
@@ -147,6 +142,7 @@ const Page = () => {
                   )}
                 />
 
+                {/* Description */}
                 <FormField
                   control={form.control}
                   name="description"
@@ -185,59 +181,50 @@ const Page = () => {
                   )}
                 />
 
+                {/* Image Upload */}
                 <FormItem>
-                  <FormLabel>Upload Images</FormLabel>
+                  <FormLabel>Upload Image</FormLabel>
                   <FormControl>
                     <div className="flex flex-col items-center justify-center border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl p-6 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition">
-                      <label className="cursor-pointer flex flex-col items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
-                        <UploadCloud className="w-8 h-8 text-indigo-500" />
-                        <span>{isUploading ? "Uploading..." : "Click or drag to upload (max 3)"}</span>
-                        <Input
-                          type="file"
-                          multiple
-                          accept="image/*"
-                          ref={fileInputRef}
-                          onChange={handleFileChange}
-                          className="hidden"
-                        />
-                      </label>
-                    </div>
-                  </FormControl>
-                  <FormMessage>{form.formState.errors.images?.message}</FormMessage>
-
-                  {imageUrls.length > 0 && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
-                      {imageUrls.map((url, index) => (
-                        <div
-                          key={index}
-                          className="relative group rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-700"
-                        >
-                          <Image
-                            src={url}
-                            alt={`Uploaded ${index + 1}`}
-                            width={128}
-                            height={128}
-                            className="object-cover w-full h-32 transition-transform duration-200 group-hover:scale-105"
+                      {!previewUrl ? (
+                        <label className="cursor-pointer flex flex-col items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+                          <UploadCloud className="w-8 h-8 text-indigo-500" />
+                          <span>Click to upload an image</span>
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            className="hidden"
+                          />
+                        </label>
+                      ) : (
+                        <div className="relative group w-full max-w-xs">
+                          <img
+                            src={previewUrl}
+                            alt="Preview"
+                            className="rounded-lg object-cover w-full h-48 border border-zinc-200 dark:border-zinc-700"
                           />
                           <button
                             type="button"
-                            onClick={() => removeImage(index)}
+                            onClick={removeImage}
                             className="absolute top-2 right-2 bg-red-500/80 hover:bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                           >
                             <X className="w-4 h-4" />
                           </button>
                         </div>
-                      ))}
+                      )}
                     </div>
-                  )}
+                  </FormControl>
+                  <FormMessage>{form.formState.errors.images?.message}</FormMessage>
                 </FormItem>
 
                 <Button
                   type="submit"
                   className="w-full mt-6 bg-indigo-600 hover:bg-indigo-700 text-white"
-                  disabled={isSubmitting || isUploading}
+                  disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Submitting..." : "Submit Rental"}
+                  {isSubmitting ? "Uploading..." : "Submit Rental"}
                 </Button>
               </form>
             </Form>
