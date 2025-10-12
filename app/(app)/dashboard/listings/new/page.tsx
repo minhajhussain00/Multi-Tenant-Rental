@@ -41,55 +41,71 @@ export default function AddRentalPage() {
     }
   };
 
-  const onSubmit = async (values: AddRentalSchema) => {
-    try {
-      setUploading(true);
+ const onSubmit = async (values: AddRentalSchema) => {
+  try {
+    setUploading(true);
 
-      let imageUrl = null;
+    let imageUrl = null;
 
-      if (values.image) {
-        const file = values.image;
-        const fileName = `${Date.now()}_${file.name}`;
-        const { data, error } = await supabase.storage
-          .from("pictures")
-          .upload(fileName, file);
+    if (values.image) {
+      const file = values.image;
+      const fileName = `${Date.now()}_${file.name}`;
+      const { data, error } = await supabase.storage
+        .from("pictures")
+        .upload(fileName, file);
 
-        if (error) throw error;
+      if (error) throw error;
 
-        const { data: publicUrl } = supabase
-          .storage
-          .from("pictures")
-          .getPublicUrl(fileName);
+      const { data: publicUrl } = supabase
+        .storage
+        .from("pictures")
+        .getPublicUrl(fileName);
 
-        imageUrl = publicUrl.publicUrl;
-      }
-
-      const { error: insertError } = await supabase
-        .from("rentals")
-        .insert([
-          {
-            rental_name: values.rental_name,
-            rental_description: values.rental_description,
-            price: values.price,
-            image_url: imageUrl,
-          },
-        ]);
-
-      if (insertError) throw insertError;
-
-      toast.success("Rental added successfully!");
-      form.reset();
-      setPreview(null);
-    } catch (err: any) {
-      console.error(err);
-      toast.error(err.message || "Error adding rental");
-    } finally {
-      setUploading(false);
+      imageUrl = publicUrl.publicUrl;
     }
-  };
+
+    const { error } = await supabase
+      .from("rentals")
+      .insert([
+        {
+          rental_name: values.rental_name,
+          rental_description: values.rental_description,
+          price: values.price,
+          image_url: imageUrl,
+        },
+      ]);
+
+    if (error) {
+    throw error;
+    console.log(error)}
+	console.log("Rental added successfully!",error)
+    toast("Rental added successfully!", {
+          description: "Your rental has been added.",
+          duration: 800,
+        })
+
+    form.reset({
+      rental_name: "",
+      rental_description: "",
+      price: 0,
+      image: undefined,
+    });
+    setPreview(null);
+
+    // Also reset file input manually
+    const fileInput = document.getElementById("rentalImageInput") as HTMLInputElement;
+    if (fileInput) fileInput.value = "";
+  } catch (err: any) {
+    console.log(err);
+    toast.error(err.message || "Error adding rental");
+  } finally {
+    setUploading(false);
+  }
+};
+
 
   return (
-    <div className="max-w-md mx-auto p-6 space-y-6">
+    <div className="max-w-screen h-screen flex justify-center items-center flex-col ">
       <h1 className="text-2xl font-bold">Add Rental</h1>
 
       <Form {...form}>
@@ -149,14 +165,16 @@ export default function AddRentalPage() {
                 <FormLabel>Image</FormLabel>
                 <FormControl>
                   <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      field.onChange(file);
-                      handleImagePreview(file);
-                    }}
-                  />
+  id="rentalImageInput"
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+    const file = e.target.files?.[0];
+    field.onChange(file);
+    handleImagePreview(file);
+  }}
+/>
+
                 </FormControl>
                 <FormMessage />
               </FormItem>
