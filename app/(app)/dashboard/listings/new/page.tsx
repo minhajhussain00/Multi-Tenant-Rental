@@ -79,9 +79,11 @@ export default function AddRentalPage() {
     throw error;
     console.log(error)}
 	console.log("Rental added successfully!",error)
-    toast.success("Rental added successfully!");
+    toast("Rental added successfully!", {
+          description: "Your rental has been added.",
+          duration: 800,
+        })
 
-    // ✅ Reset form & image preview
     form.reset({
       rental_name: "",
       rental_description: "",
@@ -103,7 +105,7 @@ export default function AddRentalPage() {
 
 
   return (
-    <div className="max-w-md mx-auto p-6 space-y-6">
+    <div className="max-w-screen h-screen flex justify-center items-center flex-col ">
       <h1 className="text-2xl font-bold">Add Rental</h1>
 
       <Form {...form}>
