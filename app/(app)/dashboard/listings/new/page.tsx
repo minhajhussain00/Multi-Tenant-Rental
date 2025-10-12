@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addRentalSchema, AddRentalSchema } from "@/lib/schemas/addRental";
 import { createClient } from "@/lib/supabase/client";
+import Image from "next/image";
 
 import {
   Form,
@@ -50,7 +51,7 @@ export default function AddRentalPage() {
     if (values.image) {
       const file = values.image;
       const fileName = `${Date.now()}_${file.name}`;
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from("pictures")
         .upload(fileName, file);
 
@@ -95,9 +96,10 @@ export default function AddRentalPage() {
     // Also reset file input manually
     const fileInput = document.getElementById("rentalImageInput") as HTMLInputElement;
     if (fileInput) fileInput.value = "";
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.log(err);
-    toast.error(err.message || "Error adding rental");
+    const errorMessage = err instanceof Error ? err.message : "Error adding rental";
+    toast.error(errorMessage);
   } finally {
     setUploading(false);
   }
@@ -183,9 +185,11 @@ export default function AddRentalPage() {
 
           {preview && (
             <div className="mt-4">
-              <img
+              <Image
                 src={preview}
                 alt="Preview"
+                width={400}
+                height={192}
                 className="w-full h-48 object-cover rounded-lg border"
               />
             </div>
