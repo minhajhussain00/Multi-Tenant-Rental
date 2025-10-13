@@ -18,9 +18,10 @@ import {
   Calendar
 } from 'lucide-react'
 import { LogoutButton } from '../auth/logout-button'
-import { getUser } from '@/lib/actions/getUser'
 
-const sidebarItems = [
+import { createClient } from '@/lib/supabase/client'
+
+let sidebarItems = [
   {
     title: 'Overview',
     href: '/dashboard',
@@ -58,11 +59,13 @@ const quickActions = [
   },
 ]
 
-const Sidebar = () => {
+const Sidebar = async() => {
   const pathname = usePathname()
-  useEffect(() => {
-    getUser()
-  }, []);
+  const supabase = createClient();
+  const rentals = await supabase.from('rentals').select("*")
+  const listings_length = rentals.data?.length || 0
+  sidebarItems[1].badge = listings_length.toString()
+
   return (
     <div className="flex h-full w-60 flex-col bg-card border-r">
 
