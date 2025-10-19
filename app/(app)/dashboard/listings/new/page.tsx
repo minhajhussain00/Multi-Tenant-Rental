@@ -50,7 +50,7 @@ export default function AddRentalPage() {
 
     if (values.image) {
       const file = values.image;
-      const fileName = `${Date.now()}`;
+      const fileName = `${Date.now()}_${file.name}`;
       const { error } = await supabase.storage
         .from("pictures")
         .upload(fileName, file);
