@@ -8,7 +8,6 @@ import { Gamepad2, Store, Wallet } from "lucide-react";
 export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col bg-gradient-to-b from-background to-muted text-foreground">
-      <Navbar />
       
       <section className="relative h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-black text-white">
 

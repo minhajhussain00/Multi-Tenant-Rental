@@ -1,19 +1,20 @@
-import { updateSession } from "@/lib/supabase/middleware";
-import { type NextRequest } from "next/server";
+import { type NextRequest } from 'next/server'
+import { updateSession } from '@/lib/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request);
+  return await updateSession(request)
 }
 
 export const config = {
   matcher: [
     /*
-     * Match only dashboard and API routes that need protection:
-     * - /dashboard/:path* (all dashboard routes)
-     * - /api/:path* (all API routes)
-     * Exclude static files and other assets
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * Feel free to modify this pattern to include more paths.
      */
-    "/dashboard/:path*",
-    "/api/:path*",
+        '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+	'/dashboard/:path*',
   ],
-};
+}
