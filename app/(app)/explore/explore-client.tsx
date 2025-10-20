@@ -6,14 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import Image from "next/image";
+import { Link } from "lucide-react";
+import { AddRentalSchema } from "@/lib/schemas/addRental";
 
-export default function ExploreClient({ rentals }: { rentals: any[] }) {
+export default function ExploreClient({ rentals }: { rentals: AddRentalSchema[] }) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [maxPrice, setMaxPrice] = useState("");
 
   const filteredRentals = rentals.filter((rental) => {
-    const matchesSearch = rental.name.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = rental.rental_name.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = category === "all" || rental.category === category;
     const matchesPrice = !maxPrice || rental.price <= parseFloat(maxPrice);
     return matchesSearch && matchesCategory && matchesPrice;
@@ -73,22 +75,22 @@ export default function ExploreClient({ rentals }: { rentals: any[] }) {
               <CardHeader className="p-0">
                 <div className="relative w-full h-48">
                   <Image
-                    src={rental.image_url || "/images/placeholder.jpg"}
-                    alt={rental.name}
+                    src={rental.image || "/images/placeholder.jpg"}
+                    alt={rental.rental_name}
                     fill
                     className="object-cover rounded-t-lg opacity-90 hover:opacity-100 transition"
                   />
                 </div>
               </CardHeader>
               <CardContent className="p-5">
-                <CardTitle className="text-lg font-bold mb-1">{rental.name}</CardTitle>
+                <CardTitle className="text-lg font-bold mb-1">{rental.rental_name}</CardTitle>
                 <CardDescription className="text-gray-400 mb-3 line-clamp-2">
-                  {rental.description}
+                  {rental.rental_description}
                 </CardDescription>
                 <div className="flex items-center justify-between">
                   <span className="text-fuchsia-400 font-semibold">${rental.price} / day</span>
                   <Button className="bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white font-semibold hover:opacity-90">
-                    Rent Now
+                   <Link href={`/rentals/${rental.id}`}>Rent Now</Link>
                   </Button>
                 </div>
               </CardContent>
