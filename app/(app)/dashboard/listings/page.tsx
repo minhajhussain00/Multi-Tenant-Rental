@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import React from "react";
 import {
   Table,
@@ -13,11 +13,16 @@ import TableData from "@/components/listingTable/TableData";
 import Link from "next/link";
 
 const Page = async () => {
-  const supabase = createClient();
-  const { data: listings, error } = await supabase.from("rentals").select("*");
+  const supabase = await createClient();
 
+  const {data,error}= await supabase.auth.getClaims()
+  const { data: listings, error:erro2 } = await supabase
+    .from('rentals')
+    .select('*')
+    .eq('rental_owner', data?.claims?.id);
+    
   if (error) {
-    console.error(error);
+    console.error(erro2);
     return (
       <div className="p-10">
         <h1 className="text-2xl font-bold mb-4">Listings</h1>
@@ -28,12 +33,12 @@ const Page = async () => {
 
   return (
     <div className="h-full w-full p-10">
-<div className="flex items-center justify-between mb-6">
-     <h1 className="text-2xl font-bold mb-6">Your Rental Listings</h1>
-     <Link href="/dashboard/listings/new" className="text-sm bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-       Add New Listing +
-     </Link>
-</div>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold mb-6">Your Rental Listings</h1>
+        <Link href="/dashboard/listings/new" className="text-sm bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+          Add New Listing +
+        </Link>
+      </div>
 
       <div className="overflow-x-auto rounded-lg border shadow-md ">
         <Table>

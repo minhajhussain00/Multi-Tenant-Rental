@@ -1,25 +1,27 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { 
-  LayoutDashboard, 
-  Package, 
-  ClipboardList, 
-  Settings, 
-  User, 
+import {
+  LayoutDashboard,
+  Package,
+  ClipboardList,
+  Settings,
+  User,
   Bell,
   Plus,
-  Calendar
+  Calendar,
 } from 'lucide-react'
 import { LogoutButton } from '../auth/logout-button'
 
 import { createClient } from '@/lib/supabase/client'
+import { useUserStore } from '@/lib/stores/useUserStore'
+import { set } from 'react-hook-form'
 
 let sidebarItems = [
   {
@@ -59,13 +61,13 @@ const quickActions = [
   },
 ]
 
-const Sidebar = async() => {
+const Sidebar = async () => {
   const pathname = usePathname()
-  const supabase = createClient();
-  const rentals = await supabase.from('rentals').select("*")
-  const listings_length = rentals.data?.length || 0
-  sidebarItems[1].badge = listings_length.toString()
-
+  const [listingsLength, setListingsLength] = React.useState<number>(0)
+  const { user } = useUserStore()
+  const supabase = createClient()
+  const listings = await supabase.from('rentals').select('*').eq('rental_owner', user?.id)
+  setListingsLength(listings.data?.length || 0)
   return (
     <div className="flex h-full w-60 flex-col bg-card border-r">
 
@@ -76,12 +78,15 @@ const Sidebar = async() => {
         </Link>
       </div>
 
-      {/* Navigation */}
+
       <div className="flex-1 overflow-auto py-2">
         <nav className="space-y-1 px-2">
           {sidebarItems.map((item) => {
             const isActive = pathname === item.href
             const Icon = item.icon
+
+         
+            const badge = item.href === '/dashboard/listings' ? listingsLength.toString() : item.badge
 
             return (
               <Link key={item.href} href={item.href}>
@@ -94,9 +99,9 @@ const Sidebar = async() => {
                 >
                   <Icon className="mr-3 h-4 w-4" />
                   <span className="flex-1 text-left">{item.title}</span>
-                  {item.badge && (
+                  {badge && (
                     <Badge variant="secondary" className="ml-auto">
-                      {item.badge}
+                      {badge}
                     </Badge>
                   )}
                 </Button>
