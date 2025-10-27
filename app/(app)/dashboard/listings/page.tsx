@@ -15,7 +15,7 @@ import Link from "next/link";
 const Page = async () => {
   const supabase = await createClient();
 
-  const {data,error}= await supabase.auth.getClaims()
+  const { data, error } = await supabase.auth.getClaims()
   const { data: listings, error:erro2 } = await supabase
     .from('rentals')
     .select('*')
