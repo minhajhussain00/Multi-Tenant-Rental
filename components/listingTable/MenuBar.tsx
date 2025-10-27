@@ -1,4 +1,4 @@
-import { AddRentalSchema } from '@/lib/schemas/addRental'
+import { RentalListing } from '@/lib/schemas/addRental'
 import React from 'react'
 import {
   Menubar,
@@ -14,7 +14,7 @@ import {EllipsisVertical} from "lucide-react"
 import Link from 'next/link'
 import { Button } from '../ui/button'
 
-const MenuBar = ({ listing }: { listing: AddRentalSchema }) => {
+const MenuBar = ({ listing }: { listing: RentalListing }) => {
     const handleClick = () => {
         console.log('Delete', listing.id);
     }

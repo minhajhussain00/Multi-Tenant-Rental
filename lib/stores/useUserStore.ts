@@ -6,6 +6,7 @@ import { create } from 'zustand'
 type User = {
   id: string
   email?: string | null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
 } | null
 
@@ -17,7 +18,8 @@ type State = {
   fetchUser: () => Promise<void>
 }
 
-export const useUserStore = create<State>((set: any, get: any) => ({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const useUserStore = create<State>((set: any) => ({
   user: null,
   loading: false,
   error: null,
@@ -27,8 +29,8 @@ export const useUserStore = create<State>((set: any, get: any) => ({
   async fetchUser() {
     try {
       set({ loading: true, error: null })
-      const { createClient } = await import('@/lib/supabase/server')
-      const supabase = await createClient()
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
       const { data, error } = await supabase.auth.getUser()
       if (error) {
         set({ error: error.message, loading: false })

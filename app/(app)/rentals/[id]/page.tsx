@@ -5,17 +5,18 @@ import { Button } from "@/components/ui/button";
 
 
 interface RentalDetailPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function RentalDetailPage({ params }: RentalDetailPageProps) {
+  const { id } = await params;
   const supabase = createClient();
 
   
   const { data: rental, error: rentalError } = await supabase
     .from("rentals")
     .select("*")
-    .eq("id", params.id)
+    .eq("id", id)
     .single();
 
   if (rentalError || !rental) {
@@ -61,7 +62,7 @@ export default async function RentalDetailPage({ params }: RentalDetailPageProps
         
               <Button 
               className="bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white font-semibold hover:opacity-90 transition"
-              onClick={(e)=>alert("rent process")}
+              onClick={()=>alert("rent process")}
               >
                 Rent Now
               </Button>

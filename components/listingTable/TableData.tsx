@@ -1,11 +1,10 @@
 import React from 'react'
-import {AddRentalSchema} from '@/lib/schemas/addRental'
+import { RentalListing } from '@/lib/schemas/addRental'
 import { TableCell, TableRow } from "@/components/ui/table";
 import Image from "next/image";
-import { Menu, Table } from 'lucide-react';
 import MenuBar from './MenuBar';
 
-const TableBody = ({listing}:{listing:AddRentalSchema}) => {
+const TableBody = ({listing}:{listing: RentalListing}) => {
  return (
     <TableRow>
       <TableCell className="font-medium">{listing.rental_name}</TableCell>
@@ -16,10 +15,10 @@ const TableBody = ({listing}:{listing:AddRentalSchema}) => {
         ${listing.price}
       </TableCell>
       <TableCell>
-        {listing.image ? (
+        {listing.image_url ? (
           <div className="relative w-20 h-20 rounded-md overflow-hidden border">
             <Image
-              src={listing.image}
+              src={listing.image_url}
               alt={listing.rental_name}
               fill
               className="object-cover"
