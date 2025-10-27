@@ -42,7 +42,6 @@ export const useUserStore = create<State>((set: any) => ({
       set({ error: message, loading: false })
     }
   },
-  persist: true,
 }))
 export function usePrefetchUser() {
   const fetchUser = useUserStore((s: State) => s.fetchUser)
