@@ -21,7 +21,6 @@ import { LogoutButton } from '../auth/logout-button'
 
 import { createClient } from '@/lib/supabase/client'
 import { useUserStore } from '@/lib/stores/useUserStore'
-import { set } from 'react-hook-form'
 
 let sidebarItems = [
   {
