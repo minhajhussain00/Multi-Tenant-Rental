@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import create, { StateCreator } from 'zustand'
+import { create } from 'zustand'
 
 type User = {
   id: string
