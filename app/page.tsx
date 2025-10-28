@@ -1,5 +1,4 @@
 "use client"
-import Navbar from "@/components/app/Navbar";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";

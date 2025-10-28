@@ -39,6 +39,7 @@
 
 import { z } from "zod";
 
+// Schema for creating a new rental (form submission)
 export const addRentalSchema = z.object({
   rental_name: z.string().min(2, "Name is required"),
   rental_description: z.string().min(10, "Description must be at least 10 characters"),
@@ -47,3 +48,14 @@ export const addRentalSchema = z.object({
 });
 
 export type AddRentalSchema = z.infer<typeof addRentalSchema>;
+
+// Type for rental from database (has id and image_url instead of File)
+export type RentalListing = {
+  id: string;
+  rental_name: string;
+  rental_description: string;
+  price: number;
+  image_url?: string | null;
+  rental_owner: string;
+  created_at?: string;
+};

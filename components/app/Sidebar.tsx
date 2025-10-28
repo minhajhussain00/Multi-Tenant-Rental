@@ -7,18 +7,20 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { 
-  LayoutDashboard, 
-  Package, 
-  ClipboardList, 
-  Settings, 
-  User, 
+import {
+  LayoutDashboard,
+  Package,
+  ClipboardList,
+  Settings,
+  User,
   Bell,
   Plus,
-  Calendar
+  Calendar,
 } from 'lucide-react'
 import { LogoutButton } from '../auth/logout-button'
-import { getUser } from '@/lib/actions/getUser'
+
+import { createClient } from '@/lib/supabase/client'
+import { useUserStore } from '@/lib/stores/useUserStore'
 
 const sidebarItems = [
   {
@@ -60,9 +62,19 @@ const quickActions = [
 
 const Sidebar = () => {
   const pathname = usePathname()
+  const [listingsLength, setListingsLength] = React.useState<number>(0)
+  const { user } = useUserStore()
+
   useEffect(() => {
-    getUser()
-  }, []);
+    const fetchListings = async () => {
+      if (user?.id) {
+        const supabase = createClient()
+        const { data } = await supabase.from('rentals').select('*').eq('rental_owner', user.id)
+        setListingsLength(data?.length || 0)
+      }
+    }
+    void fetchListings()
+  }, [user?.id])
   return (
     <div className="flex h-full w-60 flex-col bg-card border-r">
 
@@ -73,12 +85,13 @@ const Sidebar = () => {
         </Link>
       </div>
 
-      {/* Navigation */}
       <div className="flex-1 overflow-auto py-2">
         <nav className="space-y-1 px-2">
           {sidebarItems.map((item) => {
             const isActive = pathname === item.href
             const Icon = item.icon
+         
+            const badge = item.href === '/dashboard/listings' ? listingsLength.toString() : item.badge
 
             return (
               <Link key={item.href} href={item.href}>
@@ -91,9 +104,9 @@ const Sidebar = () => {
                 >
                   <Icon className="mr-3 h-4 w-4" />
                   <span className="flex-1 text-left">{item.title}</span>
-                  {item.badge && (
+                  {badge && (
                     <Badge variant="secondary" className="ml-auto">
-                      {item.badge}
+                      {badge}
                     </Badge>
                   )}
                 </Button>
