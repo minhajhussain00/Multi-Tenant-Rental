@@ -19,7 +19,7 @@ const Page = async () => {
   const { data: listings, error: erro2 } = await supabase
     .from('rentals')
     .select('*')
-    .eq('rental_owner', data?.claims?.id);
+    .eq('rental_owner', data?.claims?.sub);
     
   if (erro2) {
     console.error(erro2);
