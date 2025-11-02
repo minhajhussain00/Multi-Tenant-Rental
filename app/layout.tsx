@@ -13,10 +13,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const { setUser, user } = useUserStore()
-  const Supabase = createClient()
 
   useEffect(() => {
     const fetchProfile = async () => {
+      const Supabase = createClient()
       try {
         const { data: claims, error: claimsError } = await Supabase.auth.getClaims()
         if (claimsError) {
