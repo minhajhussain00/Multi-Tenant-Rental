@@ -1,6 +1,5 @@
 "use client"
 
-import React from 'react'
 import { create } from 'zustand'
 
 type User = {
@@ -17,7 +16,7 @@ type State = {
   setUser: (user: User) => void
 }
 
-export const useUserStore = create<State>((set: any) => ({
+export const useUserStore = create<State>((set) => ({
   user: null,
   loading: false,
   error: null,
