@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
-import { Button } from "@/components/ui/button";
+import { RentNowButton } from "./RentNowButton";
 
 
 interface RentalDetailPageProps {
@@ -60,12 +60,7 @@ export default async function RentalDetailPage({ params }: RentalDetailPageProps
               </span>
 
         
-              <Button 
-              className="bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white font-semibold hover:opacity-90 transition"
-              onClick={()=>alert("rent process")}
-              >
-                Rent Now
-              </Button>
+              <RentNowButton />
             </div>
           </div>
 
