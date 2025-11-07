@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
 
 interface RentNowButtonProps {
   rentalId: string;
@@ -16,17 +17,20 @@ export function RentNowButton({ rentalId }: RentNowButtonProps) {
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       
       if (userError || !user) {
-        alert("Please log in to rent this property");
+        toast.error("Please log in to rent this property");
         return;
       }
 
       // Here you would typically create a rental/booking record
       // For now, we'll just show a success message
-      alert(`Rental process initiated for rental ID: ${rentalId}`);
+      toast.success("Rental process initiated!", {
+        description: `Processing rental for ID: ${rentalId}`,
+        duration: 3000,
+      });
       
     } catch (error) {
       console.error("Error during rent process:", error);
-      alert("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.");
     }
   };
 
