@@ -60,7 +60,7 @@ export default async function RentalDetailPage({ params }: RentalDetailPageProps
               </span>
 
         
-              <RentNowButton />
+              <RentNowButton rentalId={rental.id} />
             </div>
           </div>
 
