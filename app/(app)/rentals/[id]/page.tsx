@@ -1,7 +1,6 @@
-"use client"
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 
 
@@ -11,7 +10,7 @@ interface RentalDetailPageProps {
 
 export default async function RentalDetailPage({ params }: RentalDetailPageProps) {
   const { id } = await params;
-  const supabase = createClient();
+  const supabase = await createClient();
 
   
   const { data: rental, error: rentalError } = await supabase

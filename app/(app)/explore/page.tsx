@@ -22,8 +22,8 @@ type RentalRow = {
 }
 export default function ExplorePage() {
   const [query, setQuery] = useState("")
-  const [minPrice, setMinPrice] = useState<number | "">("")
-  const [maxPrice, setMaxPrice] = useState<number | "">("")
+  const [minPrice, setMinPrice] = useState<string>("")
+  const [maxPrice, setMaxPrice] = useState<string>("")
   const [listings, setListings] = useState<RentalRow[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -41,11 +41,12 @@ export default function ExplorePage() {
           console.error("fetch rentals error", error)
           if (mounted) setError(error.message)
         } else {
-          if (mounted) setListings((data as any) || [])
+          if (mounted) setListings((data ?? []) as RentalRow[])
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("unexpected error fetching rentals", err)
-        if (mounted) setError(err?.message ?? String(err))
+        const msg = err instanceof Error ? err.message : String(err)
+        if (mounted) setError(msg)
       } finally {
         if (mounted) setLoading(false)
       }
@@ -91,14 +92,14 @@ export default function ExplorePage() {
         <div className="flex gap-2">
           <Input
             placeholder="Min price"
-            value={minPrice as any}
-            onChange={(e) => setMinPrice(e.target.value ? Number(e.target.value) : "")}
+            value={minPrice}
+            onChange={(e) => setMinPrice(e.target.value)}
             type="number"
           />
           <Input
             placeholder="Max price"
-            value={maxPrice as any}
-            onChange={(e) => setMaxPrice(e.target.value ? Number(e.target.value) : "")}
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
             type="number"
           />
         </div>
