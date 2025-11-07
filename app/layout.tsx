@@ -1,24 +1,50 @@
-import type { Metadata } from "next";
+"use client"
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import Navbar from "@/components/app/Navbar";
-import ClientAuthProvider from "@/components/ClientAuthProvider";
+import { useEffect } from "react";
+import { useUserStore } from "@/lib/stores/useUserStore";
+import { createClient } from "@/lib/supabase/client";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
-
-export const metadata: Metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
-};
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { setUser, user } = useUserStore()
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const Supabase = createClient()
+      try {
+        const { data: claims, error: claimsError } = await Supabase.auth.getClaims()
+        if (claimsError) {
+          console.error("getClaims error", claimsError)
+          return
+        }
+        const userId = claims?.claims.sub
+        if (!userId) return
+
+        const { data: profile, error: profileError } = await Supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .maybeSingle()
+
+        if (profileError) {
+          console.error("fetch profile error", profileError)
+          return
+        }
+
+        setUser(profile || null)
+      } catch (err) {
+        console.error("unexpected error fetching profile", err)
+      }
+    }
+
+    fetchProfile()
+  }, [user?.id, setUser])
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans antialiased" suppressHydrationWarning>
@@ -28,10 +54,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ClientAuthProvider>
+
             <Navbar />
             {children}
-          </ClientAuthProvider>
+
         </ThemeProvider>
       </body>
     </html>

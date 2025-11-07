@@ -1,3 +1,4 @@
+"use client"
 import { RentalListing } from '@/lib/schemas/addRental'
 import React from 'react'
 import {
@@ -6,7 +7,6 @@ import {
   MenubarItem,
   MenubarMenu,
   MenubarSeparator,
-  MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar"
 
@@ -19,12 +19,12 @@ const MenuBar = ({ listing }: { listing: RentalListing }) => {
         console.log('Delete', listing.id);
     }
     return (
-        <Menubar>
+        <Menubar >
             <MenubarMenu>
                 <MenubarTrigger><EllipsisVertical className='size-6 text-white'/></MenubarTrigger>
-                <MenubarContent>
+                <MenubarContent className='flex justify-center items-center flex-col  bg-gray-900' >
                     <MenubarItem>
-                        <Link href={`/edit/${listing.id}`}></Link><MenubarShortcut>⌘T</MenubarShortcut>
+                       <Button> <Link href={`/edit/${listing.id}`}>Edit</Link></Button>
                     </MenubarItem>
                     <MenubarSeparator/>
                     <MenubarItem><Button onClick={handleClick}>Delete</Button></MenubarItem>

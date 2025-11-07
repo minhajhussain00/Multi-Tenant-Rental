@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 
 
@@ -10,7 +10,7 @@ interface RentalDetailPageProps {
 
 export default async function RentalDetailPage({ params }: RentalDetailPageProps) {
   const { id } = await params;
-  const supabase = createClient();
+  const supabase = await createClient();
 
   
   const { data: rental, error: rentalError } = await supabase
@@ -26,8 +26,8 @@ export default async function RentalDetailPage({ params }: RentalDetailPageProps
 
 
   const { data: owner, error: ownerError } = await supabase
-    .from("users")
-    .select("id, full_name, avatar_url, email")
+    .from("profiles")
+    .select("id, name, image_url")
     .eq("id", rental.rental_owner)
     .single();
 
@@ -73,22 +73,15 @@ export default async function RentalDetailPage({ params }: RentalDetailPageProps
           {owner && (
             <div className="mt-6 border-t border-gray-800 pt-6 flex items-center gap-4">
               <Image
-                src={owner.avatar_url || "/images/default-avatar.png"}
-                alt={owner.full_name}
+                src={owner.image_url || "/images/default-avatar.png"}
+                alt={owner.name}
                 width={60}
                 height={60}
                 className="rounded-full object-cover"
               />
               <div>
-                <p className="font-semibold text-lg">{owner.full_name}</p>
-                {owner.email && (
-                  <a
-                    href={`mailto:${owner.email}`}
-                    className="text-fuchsia-400 text-sm hover:underline"
-                  >
-                    Message Owner
-                  </a>
-                )}
+                <p className="font-semibold text-lg">{owner.name}</p>
+               
               </div>
             </div>
           )}
