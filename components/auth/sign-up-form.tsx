@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import axios from "axios";
+
 export function SignUpForm({
   className,
   ...props
@@ -40,7 +40,7 @@ export function SignUpForm({
     }
 
     try {
-      const { error ,data} = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password
       });
