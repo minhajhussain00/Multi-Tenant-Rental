@@ -105,7 +105,7 @@ const Sidebar = () => {
                   <Icon className="mr-3 h-4 w-4" />
                   <span className="flex-1 text-left">{item.title}</span>
                   {badge && (
-                    <Badge variant="secondary" className="ml-auto">
+                    <Badge className="ml-auto">
                       {badge}
                     </Badge>
                   )}

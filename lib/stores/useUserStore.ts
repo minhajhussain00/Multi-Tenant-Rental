@@ -7,6 +7,7 @@ type User = {
   renting: string[],
   name: string,
   image: string | "placeholder",
+  stripeId:string,
 } | null
 
 type State = {
