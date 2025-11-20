@@ -158,7 +158,7 @@ export function RentNowButton({ rentalId, price, owner_id }: RentNowButtonProps)
           <Button
             disabled={totalDays === 0}
             onClick={handleRent}
-            className="bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white font-semibold disabled:opacity-50 w-full sm:w-auto"
+            className="bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white font-semibold hover:opacity-90 transition"
           >
             Checkout
           </Button>

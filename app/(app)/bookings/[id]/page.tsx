@@ -129,13 +129,12 @@ export default function Page({ params }: RentalDetailPageProps) {
         <CardContent className="space-y-4 text-sm sm:text-base">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-            {/* Booking ID */}
+        
             <div>
               <p className="font-medium">Booking ID:</p>
               <p className="text-muted-foreground">{booking.id}</p>
             </div>
 
-            {/* Status */}
             <div>
               <p className="font-medium">Status:</p>
               <p
@@ -151,7 +150,6 @@ export default function Page({ params }: RentalDetailPageProps) {
               </p>
             </div>
 
-            {/* Price */}
             <div>
               <p className="font-medium">Total Price:</p>
               <p className="text-muted-foreground">
