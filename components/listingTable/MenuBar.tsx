@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/menubar";
 import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
 import { toast } from "sonner";
 
 const MenuBar = ({ listing }: { listing: RentalListing }) => {

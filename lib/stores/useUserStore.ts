@@ -2,7 +2,7 @@
 
 import { create } from 'zustand'
 
-type User = {
+export type User = {
   id: string
   renting: string[],
   name: string,

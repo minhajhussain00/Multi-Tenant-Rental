@@ -19,27 +19,39 @@ import axios from "axios";
 interface RentalDetailPageProps {
   params: Promise<{ id: string }>;
 }
-interface HandleCheckout {
-  (price?: number | React.MouseEvent<HTMLButtonElement>, stripeId?: string): Promise<void>;
+
+interface Booking {
+  id: string;
+  rental_id: string;
+  total_price?: number;
+  status?: string;
 }
+
+interface Rental {
+  id: string;
+  title?: string;
+  description?: string;
+  image_url?: string;
+  rental_name?: string;
+}
+
 
 export default function Page({ params }: RentalDetailPageProps) {
   const { id } = React.use(params);
   const {user} = useUserStore();
   const router = useRouter();
-  const supabase = createClient();
 
-  const [booking, setBooking] = useState<any>(null);
-  const [rental, setRental] = useState<any>(null);
+  const [booking, setBooking] = useState<Booking | null>(null);
+  const [rental, setRental] = useState<Rental | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
+      const supabase = createClient();
       try {
         setLoading(true);
 
-        const { data: bookingData, error: bookingError } = await supabase
-          .from("bookings")
+        const { data: bookingData, error: bookingError } = await supabase.from("bookings")
           .select("*")
           .eq("id", id)
           .maybeSingle();
@@ -78,7 +90,7 @@ export default function Page({ params }: RentalDetailPageProps) {
     }
 
     fetchData();
-  }, [id]);
+  }, [id, router]);
 
 
   if (loading) {
@@ -91,19 +103,27 @@ export default function Page({ params }: RentalDetailPageProps) {
 
   if (!booking || !rental) return null;
 
-  const handleCheckout: HandleCheckout = async (price, stripeId) => {
-    const res = await axios.post(`${window.location.origin}/api/checkout`,{
-      price:Math.floor(booking.total_price),
-      stripeId: user?.stripeId,
-      name:rental.rental_name,
-      rentalId:rental.id,
-      booking_id:booking.id
-    })
-  
-    if(res.status===200){
-      router.push(res.data.url);
-  }
-}
+  const handleCheckout = async (): Promise<void> => {
+    try {
+      const res = await axios.post(`${window.location.origin}/api/checkout`, {
+        price: Math.floor(booking?.total_price ?? 0),
+        stripeId: user?.stripeId,
+        name: rental?.rental_name,
+        rentalId: rental?.id,
+        booking_id: booking?.id,
+      });
+
+      if (res.status === 200 && res.data?.url) {
+        router.push(res.data.url);
+      } else if (res.status === 200 && res.data?.sessionId) {
+        // fallback: if API returns a sessionId, navigate to checkout page that uses it
+        router.push(`/payment/success?session_id=${res.data.sessionId}`);
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+      toast.error("Failed to start checkout.");
+    }
+  };
   return (
     <div className="max-w-2xl mx-auto mt-8 p-4">
       <Card className="overflow-hidden shadow-lg">

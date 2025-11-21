@@ -2,8 +2,9 @@
 
 import { ReactNode, useEffect } from "react";
 import { useUserStore } from "@/lib/stores/useUserStore";
+import { User } from "@/lib/stores/useUserStore";
 
-export function UserProvider({ initialUser, children }: { initialUser: any; children: ReactNode }) {
+export function UserProvider({ initialUser, children }: { initialUser: User; children: ReactNode }) {
   const { setUser } = useUserStore();
 
   useEffect(() => {
@@ -13,3 +14,4 @@ export function UserProvider({ initialUser, children }: { initialUser: any; chil
   return <>{children}</>;
 }
 
+e
