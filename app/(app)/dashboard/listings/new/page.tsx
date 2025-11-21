@@ -93,7 +93,6 @@ export default function AddRentalPage() {
     });
     setPreview(null);
 
-    // Also reset file input manually
     const fileInput = document.getElementById("rentalImageInput") as HTMLInputElement;
     if (fileInput) fileInput.value = "";
   } catch (err: unknown) {
@@ -107,11 +106,13 @@ export default function AddRentalPage() {
 
 
   return (
-    <div className="max-w-screen h-screen flex justify-center items-center flex-col ">
-      <h1 className="text-2xl font-bold">Add Rental</h1>
+ <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10 bg-background text-foreground">
+    <div className="w-full max-w-md bg-card border border-border rounded-2xl shadow-lg p-6">
+      <h1 className="text-2xl font-semibold text-center mb-6">Add Rental</h1>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          {/* Rental Name */}
           <FormField
             control={form.control}
             name="rental_name"
@@ -133,13 +134,15 @@ export default function AddRentalPage() {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Add details about the rental..." {...field} />
+                  <Textarea
+                    placeholder="Add details about the rental..."
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="price"
@@ -149,6 +152,7 @@ export default function AddRentalPage() {
                 <FormControl>
                   <Input
                     type="number"
+                    min="0"
                     placeholder="e.g., 20"
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
@@ -159,6 +163,7 @@ export default function AddRentalPage() {
             )}
           />
 
+          {/* Image Upload */}
           <FormField
             control={form.control}
             name="image"
@@ -167,16 +172,15 @@ export default function AddRentalPage() {
                 <FormLabel>Image</FormLabel>
                 <FormControl>
                   <Input
-  id="rentalImageInput"
-  type="file"
-  accept="image/*"
-  onChange={(e) => {
-    const file = e.target.files?.[0];
-    field.onChange(file);
-    handleImagePreview(file);
-  }}
-/>
-
+                    id="rentalImageInput"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      field.onChange(file);
+                      handleImagePreview(file);
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -184,22 +188,30 @@ export default function AddRentalPage() {
           />
 
           {preview && (
-            <div className="mt-4">
+            <div className="mt-3">
               <Image
                 src={preview}
                 alt="Preview"
                 width={400}
                 height={192}
-                className="w-full h-48 object-cover rounded-lg border"
+                className="w-full h-48 object-cover rounded-lg border border-border"
               />
             </div>
           )}
 
           <Button type="submit" disabled={uploading} className="w-full">
-            {uploading ? "Uploading..." : "Add Rental"}
+            {uploading ? (
+              <div className="flex items-center justify-center space-x-2">
+                <span className="size-4 border-2 border-t-transparent rounded-full animate-spin"></span>
+                <span>Submitting...</span>
+              </div>
+            ) : (
+              "Add Rental"
+            )}
           </Button>
         </form>
       </Form>
     </div>
+  </div>
   );
 }

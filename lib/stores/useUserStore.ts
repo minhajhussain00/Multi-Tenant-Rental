@@ -2,11 +2,12 @@
 
 import { create } from 'zustand'
 
-type User = {
+export type User = {
   id: string
   renting: string[],
   name: string,
   image: string | "placeholder",
+  stripeId:string,
 } | null
 
 type State = {

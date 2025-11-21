@@ -1,65 +1,43 @@
-"use client"
-import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import Navbar from "@/components/app/Navbar";
-import { useEffect } from "react";
-import { useUserStore } from "@/lib/stores/useUserStore";
-import { createClient } from "@/lib/supabase/client";
+import { ThemeProvider } from "next-themes";
+import { createClient } from "@/lib/supabase/server";
+import { UserProvider } from "@/lib/providers/UserProvider";
 
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const supabase = createClient();
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const { setUser, user } = useUserStore()
+  const {
+    data: { user },
+  } = await (await supabase).auth.getUser();
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const Supabase = createClient()
-      try {
-        const { data: claims, error: claimsError } = await Supabase.auth.getClaims()
-        if (claimsError) {
-          console.error("getClaims error", claimsError)
-          return
-        }
-        const userId = claims?.claims.sub
-        if (!userId) return
+  let profile = null;
+  if (user) {
+    const { data } = await (await supabase)
+      .from("profiles")
+      .select("*")
+      .eq("id", user.id)
+      .maybeSingle();
+    profile = data;
+  }
 
-        const { data: profile, error: profileError } = await Supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', userId)
-          .maybeSingle()
-
-        if (profileError) {
-          console.error("fetch profile error", profileError)
-          return
-        }
-
-        setUser(profile || null)
-      } catch (err) {
-        console.error("unexpected error fetching profile", err)
-      }
-    }
-
-    fetchProfile()
-  }, [user?.id, setUser])
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans antialiased" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
-
+         
+          <UserProvider initialUser={profile}>
             <Navbar />
             {children}
-
+          </UserProvider>
         </ThemeProvider>
       </body>
     </html>
   );
 }
+
