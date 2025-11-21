@@ -14,4 +14,3 @@ export function UserProvider({ initialUser, children }: { initialUser: User; chi
   return <>{children}</>;
 }
 
-e
