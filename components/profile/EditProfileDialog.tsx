@@ -63,7 +63,7 @@ export function EditProfileDialog() {
       // Upload image if provided
       if (values.image) {
         const file = values.image;
-        const fileName = `${Date.now()}_${file.name}`;
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 9)}_${file.name}`;
         const { error: uploadError } = await supabase.storage
           .from("pictures")
           .upload(fileName, file);
