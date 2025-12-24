@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addRentalSchema, AddRentalSchema } from "@/lib/schemas/addRental";
 import { createClient } from "@/lib/supabase/client";
+import axios from "axios";
 import Image from "next/image";
 
 import {
@@ -48,7 +49,9 @@ export default function AddRentalPage() {
 
     let imageUrl = null;
 
+    // Still use Supabase client for storage (or create separate upload API)
     if (values.image) {
+      const supabase = createClient();
       const file = values.image;
       const fileName = `${Date.now()}_${file.name}`;
       const { error } = await supabase.storage
@@ -65,25 +68,18 @@ export default function AddRentalPage() {
       imageUrl = publicUrl.publicUrl;
     }
 
-    const { error } = await supabase
-      .from("rentals")
-      .insert([
-        {
-          rental_name: values.rental_name,
-          rental_description: values.rental_description,
-          price: values.price,
-          image_url: imageUrl,
-        },
-      ]);
+    // Use axios to create rental via API
+    await axios.post("/api/rentals", {
+      rental_name: values.rental_name,
+      rental_description: values.rental_description,
+      price: values.price,
+      image_url: imageUrl,
+    });
 
-    if (error) {
-    throw error;
-    console.log(error)}
-	console.log("Rental added successfully!",error)
     toast("Rental added successfully!", {
-          description: "Your rental has been added.",
-          duration: 800,
-        })
+      description: "Your rental has been added.",
+      duration: 800,
+    });
 
     form.reset({
       rental_name: "",

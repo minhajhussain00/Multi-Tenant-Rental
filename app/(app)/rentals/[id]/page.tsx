@@ -1,6 +1,8 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
+import axios from "axios";
 import { RentNowButton } from "../../../../components/RentNowButton";
 import { toast } from "sonner";
 
@@ -8,37 +10,75 @@ interface RentalDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function RentalDetailPage({ params }: RentalDetailPageProps) {
-  const { id } = await params;
-  const supabase = await createClient();
+interface Rental {
+  id: string;
+  rental_name: string;
+  rental_description?: string;
+  price: number;
+  image_url?: string;
+  rental_owner: string;
+}
 
-  const { data: rental, error: rentalError } = await supabase
-    .from("rentals")
-    .select("*")
-    .eq("id", id)
-    .single();
+interface Owner {
+  id: string;
+  name: string;
+  image_url?: string;
+}
 
-  if (rentalError || !rental) {
-    console.error("Error fetching rental:", rentalError);
-    toast.error("Failed to fetch rental details");
-    return notFound();
+export default function RentalDetailPage({ params }: RentalDetailPageProps) {
+  const [id, setId] = useState<string>("");
+  const [rental, setRental] = useState<Rental | null>(null);
+  const [owner, setOwner] = useState<Owner | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    params.then((p) => setId(p.id));
+  }, [params]);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchRental = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`/api/rentals/${id}`);
+        setRental(response.data.rental);
+        setOwner(response.data.owner);
+      } catch (error) {
+        console.error("Failed to fetch rental:", error);
+        toast.error("Failed to fetch rental details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRental();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-zinc-950 to-black text-white py-24 px-6 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center mb-4">
+            <div className="w-12 h-12 border-4 border-fuchsia-400/30 border-t-fuchsia-400 rounded-full animate-spin"></div>
+          </div>
+          <p className="text-lg">Loading rental details...</p>
+        </div>
+      </main>
+    );
   }
 
-  const { data: owner, error: ownerError } = await supabase
-    .from("profiles")
-    .select("id, name, image_url")
-    .eq("id", rental.rental_owner)
-    .single();
-
-  if (ownerError) {
-    console.error("Error fetching owner:", ownerError);
-    toast.error("Failed to fetch owner info");
+  if (!rental) {
+    return (
+      <main className="min-h-screen bg-gradient-to-b from-zinc-950 to-black text-white py-24 px-6 flex items-center justify-center">
+        <p className="text-lg">Rental not found</p>
+      </main>
+    );
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-zinc-950 to-black text-white py-24 px-6">
+    <main className="min-h-[90vh] bg-gradient-to-b from-zinc-950 to-black text-white py-24 px-6">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-14">
-
         <div className="relative w-full h-[28rem] rounded-3xl overflow-hidden shadow-xl border border-zinc-800">
           <Image
             src={rental.image_url || "/images/placeholder.jpg"}
@@ -49,26 +89,33 @@ export default async function RentalDetailPage({ params }: RentalDetailPageProps
           />
         </div>
 
-    
-   
-          
-                  <div className="flex flex-col justify-between">
+        <div className="flex flex-col gap-8 h-full">
           <div>
-            <h1 className="text-4xl font-bold mb-3">{rental.rental_name}</h1>
-            <p className="text-gray-300 mb-6">{rental.rental_description}</p>
+            <h1 className="text-4xl font-bold mb-6">
+              {rental.rental_name}
+            </h1>
 
-            <div className="flex items-center justify-between mb-10">
-              <span className="text-2xl font-semibold text-fuchsia-400">
-                ${rental.price} / day
-              </span>
-
-         <RentNowButton rentalId={rental.id} price={rental.price} owner_id={owner?.id} />
+            <div className="min-h-[30vh] overflow-y-auto pr-2">
+              <p className="text-gray-300">
+                {rental.rental_description}
+              </p>
             </div>
           </div>
 
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <span className="text-2xl font-semibold text-fuchsia-400">
+              ${rental.price} / day
+            </span>
+
+            <RentNowButton
+              rentalId={rental.id}
+              price={rental.price}
+              owner_id={owner?.id ?? ""}
+            />
+          </div>
 
           {owner && (
-            <div className="mt-6 border-t border-zinc-800 pt-6 flex items-center gap-4">
+            <div className="border-t border-zinc-800 pt-6 flex items-center gap-4">
               <Image
                 src={owner.image_url || "/images/default-avatar.png"}
                 alt={owner.name}
@@ -83,6 +130,7 @@ export default async function RentalDetailPage({ params }: RentalDetailPageProps
             </div>
           )}
         </div>
+
       </div>
 
       <div className="absolute inset-0 -z-10 overflow-hidden">

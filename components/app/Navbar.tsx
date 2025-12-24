@@ -65,12 +65,12 @@ export default function Navbar() {
         </Button>
       ) : (
         <>
-          <Link href="/signin">
+          <Link href="/auth/login">
             <Button variant="ghost" size="sm" className="flex items-center gap-2">
               <LogIn size={16} /> Sign in
             </Button>
           </Link>
-          <Link href="/signup">
+          <Link href="/auth/sign-up">
             <Button size="sm" className="flex items-center gap-2">
               <UserPlus size={16} /> Sign up
             </Button>
@@ -85,7 +85,7 @@ export default function Navbar() {
   
       <Link href="/" className="flex items-center gap-2 font-semibold text-xl">
         <Rocket className="w-5 h-5 text-primary" />
-        MyApp
+        Game Rent
       </Link>
 
       <div className="hidden md:flex items-center gap-8">
@@ -94,8 +94,6 @@ export default function Navbar() {
       <div className="hidden md:flex items-center gap-2">
         <AuthButtons />
       </div>
-
-      {/* Mobile menu button */}
       <div className="md:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>

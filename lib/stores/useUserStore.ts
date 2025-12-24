@@ -1,13 +1,13 @@
 "use client"
 
-import { create } from 'zustand'
+import { create } from "zustand"
 
 export type User = {
   id: string
   renting: string[],
   name: string,
   image: string | "placeholder",
-  stripeId:string,
+  stripeId: string,
 } | null
 
 type State = {
@@ -15,14 +15,13 @@ type State = {
   loading: boolean
   error: string | null
   setUser: (user: User) => void
+  setLoading: (loading: boolean) => void
 }
 
 export const useUserStore = create<State>((set) => ({
   user: null,
-  loading: false,
+  loading: true, 
   error: null,
-  setUser(user: User) {
-    set({ user })
-  },
+  setUser: (user) => set({ user }),
+  setLoading: (loading) => set({ loading }),
 }))
-

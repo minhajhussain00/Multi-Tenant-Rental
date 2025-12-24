@@ -87,7 +87,7 @@ export function RentNowButton({ rentalId, price, owner_id }: RentNowButtonProps)
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white font-semibold hover:opacity-90 transition w-full sm:w-auto">
+        <Button className="bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white font-semibold hover:opacity-90 transition sm:w-auto">
           Rent Now
         </Button>
       </DialogTrigger>

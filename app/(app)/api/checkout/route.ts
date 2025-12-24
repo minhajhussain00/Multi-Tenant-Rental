@@ -1,16 +1,33 @@
 import stripe from "@/lib/stripe";
 import type Stripe from "stripe";
 
-export async function POST(req: Request) {
-    try {
 
-        const { price, name = 'Rental', rentalId, booking_id }:{
+export async function POST(req: Request) {
+
+    try {
+        const { price, name = 'Rental', rentalId, booking_id }: {
             price?: number;
             name?: string;
             rentalId?: string;
             booking_id?: string;
         } = await req.json();
         console.log(price, name);
+
+        if (!price || price <= 0) {
+            return new Response(
+                JSON.stringify({ error: "Invalid price" }),
+                { status: 400 }
+            );
+        }
+
+        if (!rentalId || !booking_id) {
+            return new Response(
+                JSON.stringify({ error: "Missing rental or booking id" }),
+                { status: 400 }
+            );
+        }
+
+        const amountInCents = Math.round(price * 100);
         const session = await stripe.checkout.sessions.create(
             ({
                 payment_method_types: ["card"],
@@ -18,7 +35,7 @@ export async function POST(req: Request) {
                     {
                         price_data: {
                             currency: "usd",
-                            unit_amount: Math.floor(price ?? 0),
+                            unit_amount: amountInCents,
                             product_data: {
                                 name,
                             },
@@ -41,7 +58,7 @@ export async function POST(req: Request) {
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (err: unknown) {
-   
+
         let message = 'Unknown error';
         if (err instanceof Error) {
             message = err.message;
@@ -51,7 +68,7 @@ export async function POST(req: Request) {
             try {
                 message = String(err);
             } catch {
-                
+
             }
         }
 
