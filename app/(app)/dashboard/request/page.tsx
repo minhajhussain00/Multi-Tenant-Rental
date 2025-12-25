@@ -37,6 +37,9 @@ const Page = () => {
     return (
         <div className="p-6">
             <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
+                {bookings.length === 0 && (
+                    <p className="text-gray-500">No current rentals found.</p>
+                )}
                 {bookings.map((item) => (
                     <Card key={item.id} className="overflow-hidden rounded-xl shadow-md">
 
