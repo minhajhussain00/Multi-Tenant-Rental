@@ -7,11 +7,8 @@ import MenuBar from './MenuBar';
 const TableBody = ({listing}:{listing: RentalListing}) => {
  return (
     <TableRow>
-      <TableCell className="font-medium">{listing.rental_name}</TableCell>
-      <TableCell className="max-w-md  text-muted-foreground">
-        {listing.rental_description}
-      </TableCell>
-      <TableCell className="text-right font-semibold">
+      <TableCell className="font-medium" width={"30%"}>{listing.rental_name}</TableCell>
+      <TableCell className="font-semibold"  width={"20%"}>
         ${listing.price}
       </TableCell>
       <TableCell>
@@ -28,7 +25,7 @@ const TableBody = ({listing}:{listing: RentalListing}) => {
           <span className="text-sm text-muted-foreground">No image</span>
         )}
       </TableCell>
-      <TableCell>
+      <TableCell width={"20%"}>
         <MenuBar listing={listing} />
       </TableCell>
     </TableRow>

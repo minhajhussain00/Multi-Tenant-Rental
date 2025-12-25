@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { toast } from "sonner";
 import {
   Card,
@@ -15,10 +14,6 @@ import {
 import Image from "next/image";
 import { useUserStore } from "@/lib/stores/useUserStore";
 import axios from "axios";
-
-interface RentalDetailPageProps {
-  params: Promise<{ id: string }>;
-}
 
 interface Booking {
   id: string;
@@ -35,29 +30,31 @@ interface Rental {
   rental_name?: string;
 }
 
-
-export default function Page({ params }: RentalDetailPageProps) {
-  const { id } = React.use(params);
-  const {user} = useUserStore();
+export default function Page() {
+  const { id } = useParams(); // <-- ✅ Correct way in Client Component
   const router = useRouter();
+  const { user } = useUserStore();
 
   const [booking, setBooking] = useState<Booking | null>(null);
   const [rental, setRental] = useState<Rental | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!id) return;
+
     async function fetchData() {
       const supabase = createClient();
+
       try {
         setLoading(true);
 
-        const { data: bookingData, error: bookingError } = await supabase.from("bookings")
+        const { data: bookingData, error: bookingError } = await supabase
+          .from("bookings")
           .select("*")
           .eq("id", id)
           .maybeSingle();
 
         if (bookingError) throw bookingError;
-
         if (!bookingData) {
           toast.warning("Booking not found.");
           router.push("/rentals");
@@ -73,7 +70,6 @@ export default function Page({ params }: RentalDetailPageProps) {
           .maybeSingle();
 
         if (rentalError) throw rentalError;
-
         if (!rentalData) {
           toast.warning("Rental not found.");
           router.push("/rentals");
@@ -92,6 +88,22 @@ export default function Page({ params }: RentalDetailPageProps) {
     fetchData();
   }, [id, router]);
 
+  async function handleCheckout() {
+    try {
+      const res = await axios.post("/api/checkout", {
+        price: Math.floor(booking?.total_price ?? 0),
+        stripeId: user?.stripeId,
+        name: rental?.rental_name,
+        rentalId: rental?.id,
+        booking_id: booking?.id,
+      });
+
+      if (res.data?.url) router.push(res.data.url);
+    } catch (err) {
+      console.error(err);
+      toast.error("Checkout failed.");
+    }
+  }
 
   if (loading) {
     return (
@@ -103,27 +115,6 @@ export default function Page({ params }: RentalDetailPageProps) {
 
   if (!booking || !rental) return null;
 
-  const handleCheckout = async (): Promise<void> => {
-    try {
-      const res = await axios.post(`${window.location.origin}/api/checkout`, {
-        price: Math.floor(booking?.total_price ?? 0),
-        stripeId: user?.stripeId,
-        name: rental?.rental_name,
-        rentalId: rental?.id,
-        booking_id: booking?.id,
-      });
-
-      if (res.status === 200 && res.data?.url) {
-        router.push(res.data.url);
-      } else if (res.status === 200 && res.data?.sessionId) {
-        // fallback: if API returns a sessionId, navigate to checkout page that uses it
-        router.push(`/payment/success?session_id=${res.data.sessionId}`);
-      }
-    } catch (err) {
-      console.error("Checkout error:", err);
-      toast.error("Failed to start checkout.");
-    }
-  };
   return (
     <div className="max-w-2xl mx-auto mt-8 p-4">
       <Card className="overflow-hidden shadow-lg">
@@ -134,7 +125,6 @@ export default function Page({ params }: RentalDetailPageProps) {
               alt={rental.title || "Rental image"}
               fill
               className="object-cover"
-              priority
             />
           </div>
         )}
@@ -148,8 +138,6 @@ export default function Page({ params }: RentalDetailPageProps) {
 
         <CardContent className="space-y-4 text-sm sm:text-base">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-
-        
             <div>
               <p className="font-medium">Booking ID:</p>
               <p className="text-muted-foreground">{booking.id}</p>
@@ -181,9 +169,9 @@ export default function Page({ params }: RentalDetailPageProps) {
           <div className="pt-6 flex justify-end">
             <button
               onClick={handleCheckout}
-              className="bg-primary text-black px-5 py-2.5 rounded-lg hover:opacity-90 transition text-sm sm:text-base font-medium"
+              className="bg-primary text-black px-5 py-2.5 rounded-lg hover:opacity-90 transition font-medium"
             >
-              Checkout — ${booking.total_price?.toFixed(2) ?? "0.00"}
+              Checkout — ${booking.total_price?.toFixed(2)}
             </button>
           </div>
         </CardContent>

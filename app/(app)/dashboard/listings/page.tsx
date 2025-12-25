@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import React from "react";
+
 import {
   Table,
   TableBody,
@@ -46,9 +46,9 @@ const Page = async () => {
           <TableHeader>
             <TableRow className="p-5">
               <TableHead >Rental Name</TableHead>
-              <TableHead>Description</TableHead>
               <TableHead >Price</TableHead>
-              <TableHead className="">Image</TableHead>
+              <TableHead >Image</TableHead>
+              <TableHead >Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

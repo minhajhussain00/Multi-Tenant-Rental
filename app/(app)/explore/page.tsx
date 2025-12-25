@@ -2,6 +2,7 @@
 import React, { useMemo, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import axios from "axios"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -34,15 +35,8 @@ export default function ExplorePage() {
       setLoading(true)
       setError(null)
       try {
-        const { createClient } = await import("@/lib/supabase/client")
-        const supabase = createClient()
-        const { data, error } = await supabase.from("rentals").select("*").order("created_at", { ascending: false })
-        if (error) {
-          console.error("fetch rentals error", error)
-          if (mounted) setError(error.message)
-        } else {
-          if (mounted) setListings((data ?? []) as RentalRow[])
-        }
+        const response = await axios.get("/api/rentals");
+        if (mounted) setListings((response.data ?? []) as RentalRow[])
       } catch (err: unknown) {
         console.error("unexpected error fetching rentals", err)
         const msg = err instanceof Error ? err.message : String(err)
@@ -126,16 +120,6 @@ export default function ExplorePage() {
                 </div>
                 <CardHeader>
                   <CardTitle>{listing.rental_name}</CardTitle>
-                  <CardDescription
-                    style={{
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {listing.rental_description}
-                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="text-sm text-muted-foreground">{listing.price ? `$${listing.price}/mo` : ""}</div>
