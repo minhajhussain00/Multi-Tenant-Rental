@@ -7,26 +7,35 @@ const DashboardLayout = async ({
 }: {
   children: React.ReactNode
 }) => {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const {
     data: { user },
-  } = await (await supabase).auth.getUser()
+  } = await supabase.auth.getUser()
 
   if (!user) return null
 
-  const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const { data: listingsData, error: listingsError } = await supabase
+    .from('rentals')
+    .select('*')
+    .eq('rental_owner', user.id)
+    .order('created_at', { ascending: false })
 
+  if (listingsError) {
+    console.error('Supabase error fetching rentals for dashboard layout:', listingsError)
+  }
 
-  const listingsRes = await fetch(`${baseUrl}/api/rentals?owner_id=${user.id}`, {
-      cache: 'no-store',
-    })
-  const handoversRes = await fetch(`${baseUrl}/api/handover?owner_id=${user.id}`, {
-      cache: 'no-store',
-    })
-  const listings = await listingsRes.json()
-  const handovers = await handoversRes.json()
+  const { data: handoversData, error: handoversError } = await supabase
+    .from('rental_handovers')
+    .select('*')
+    .eq('owner', user.id)
+
+  if (handoversError) {
+    console.error('Supabase error fetching handovers for dashboard layout:', handoversError)
+  }
+
+  const listings = listingsData ?? []
+  const handovers = handoversData ?? []
 
   return (
     <div className="flex">
