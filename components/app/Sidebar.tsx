@@ -36,7 +36,7 @@ const sidebarItems = [
   },
   {
     title: 'Rental Requests',
-    href: '/dashboard/requests',
+    href: '/dashboard/request',
     icon: ClipboardList,
   },
     {
