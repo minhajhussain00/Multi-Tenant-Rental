@@ -42,7 +42,6 @@ export default async function ProfilePage() {
     .select("*")
     .eq("rental_owner", authUser.id);
 
-  // Get rentals the user is currently renting
   const rentingIds = profile.renting || [];
   let currentRentals = [];
   if (rentingIds.length > 0) {
@@ -53,7 +52,6 @@ export default async function ProfilePage() {
     currentRentals = data || [];
   }
 
-  // Calculate account age
   const accountCreated = new Date(authUser.created_at);
   const now = new Date();
   const daysSinceCreation = Math.floor(
@@ -78,7 +76,6 @@ export default async function ProfilePage() {
           <h1 className="text-3xl font-bold">Profile</h1>
         </div>
 
-        {/* Profile Card */}
         <Card>
           <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
             <div className="flex items-center space-x-4">
@@ -106,7 +103,6 @@ export default async function ProfilePage() {
           </CardHeader>
         </Card>
 
-        {/* User Details */}
         <Card>
           <CardHeader>
             <CardTitle>Account Information</CardTitle>
@@ -188,7 +184,6 @@ export default async function ProfilePage() {
           </Card>
         </div>
 
-        {/* Currently Renting Properties */}
         {currentRentals.length > 0 && (
           <Card>
             <CardHeader>
