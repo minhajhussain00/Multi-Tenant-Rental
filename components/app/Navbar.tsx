@@ -24,7 +24,6 @@ export default function Navbar() {
   const router = useRouter()
   const [open, setOpen] = useState(false)
 
-
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut()
     if (!error) {
@@ -81,8 +80,7 @@ export default function Navbar() {
   )
 
   return (
-    <nav className="w-full flex items-center justify-between px-6 py-5   border-b bg-background/80 backdrop-blur-md">
-  
+    <nav className="fixed top-0 left-0 w-full flex items-center justify-between px-6 py-5 border-b bg-background/80 backdrop-blur-md z-50">
       <Link href="/" className="flex items-center gap-2 font-semibold text-xl">
         <Rocket className="w-5 h-5 text-primary" />
         Game Rent
@@ -112,3 +110,4 @@ export default function Navbar() {
     </nav>
   )
 }
+

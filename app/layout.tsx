@@ -18,8 +18,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         >
           <UserProvider>
             <AppWrapper>
-              <Navbar />
+              <Navbar className="fixed" />
+              <main className="mt-20">
               {children}
+              </main>
               <Toaster/>
             </AppWrapper>
           </UserProvider>
