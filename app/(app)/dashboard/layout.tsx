@@ -38,14 +38,16 @@ const DashboardLayout = async ({
   const handovers = handoversData ?? []
 
   return (
-    <div className="flex">
+    <div className="flex ">
+    
       <Sidebar
-        counts={{
+          counts={{
           listings: Array.isArray(listings) ? listings.length : 0,
           requests: Array.isArray(handovers) ? handovers.length : 0,
         }}
-      />
-      <main className="flex-1 overflow-y-auto">
+        />
+
+      <main className="flex-1 lg:ml-60	 overflow-y-auto">
         {children}
       </main>
     </div>

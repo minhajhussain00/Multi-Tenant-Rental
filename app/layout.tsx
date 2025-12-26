@@ -19,7 +19,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <UserProvider>
             <AppWrapper>
               <Navbar />
+              <main className="mt-20">
               {children}
+              </main>
               <Toaster/>
             </AppWrapper>
           </UserProvider>
