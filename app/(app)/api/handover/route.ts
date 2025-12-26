@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
       .eq("owner", userId);
 
     if (error) {
-      console.error("Supabase error fetching bookings:", error);
+      console.error("Supabase error fetching handovers:", error);
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
@@ -43,9 +43,9 @@ export async function GET(req: NextRequest) {
     let message = "Unknown error";
     if (err instanceof Error) {
       message = err.message;
-      console.error("GET /api/bookings error:", err.message);
+      console.error("GET /api/handover error:", err.message);
     } else {
-      console.error("GET /api/bookings error:", err);
+      console.error("GET /api/handover error:", err);
     }
 
     return NextResponse.json({ error: message }, { status: 500 });
