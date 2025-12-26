@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -101,7 +101,6 @@ const Sidebar = ({ counts }: { counts: SidebarCounts }) => {
           })}
         </nav>
 
-        {/* Quick Actions */}
         <Separator className="my-4" />
         <div className="px-3">
           <h3 className="mb-2 px-3 text-sm font-medium text-muted-foreground">
@@ -119,7 +118,6 @@ const Sidebar = ({ counts }: { counts: SidebarCounts }) => {
           </nav>
         </div>
 
-        {/* Profile / Settings */}
         <Separator className="my-4" />
         <div className="px-3">
           <nav className="space-y-1">
@@ -153,8 +151,7 @@ const Sidebar = ({ counts }: { counts: SidebarCounts }) => {
             </Button>
           </SheetTrigger>
           <SheetTitle>   </SheetTitle>
-          <SheetContent side="left"      className="p-0 w-60 mt-20 bg-card/95 backdrop-blur-md shadow-lg"
-      overlayclassname="bg-transparent backdrop-blur-0	">
+          <SheetContent side="left"      className="p-0 w-60 mt-20 bg-card/95 backdrop-blur-md shadow-lg">	
             <SidebarContent />
           </SheetContent>
         

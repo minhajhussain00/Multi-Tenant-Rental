@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+
 import { useUserStore } from "@/lib/stores/useUserStore";
 
 import {
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 
+import ActivityCard from "@/components/dashboard/ActivityCard"
+import ActionCard from "@/components/dashboard/ActionCard";
+import StatCard from "@/components/dashboard/StatCard";
 export default function DashboardPage() {
   const { user } = useUserStore();
   const [data, setData] = useState<any>(null);
@@ -109,112 +108,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-function StatCard({
-  title,
-  value,
-  subtitle,
-}: {
-  title: string;
-  value: any;
-  subtitle: string;
-}) {
-  return (
-    <Card className="relative overflow-hidden bg-card/80 backdrop-blur-sm
-  shadow-[0_10px_30px_-10px_rgba(59,130,246,0.35)]
-  hover:shadow-[0_20px_45px_-15px_rgba(59,130,246,0.45)]
-  transition-shadow">
-
-    
-      <div className="absolute inset-x-0 top-0 h-1 bg-blue-500/60" />
-
-
-      <CardContent className="pt-6 space-y-1">
-        <p className="text-sm text-muted-foreground">{title}</p>
-        <p className="text-3xl font-bold">{value}</p>
-        <p className="text-xs text-muted-foreground">{subtitle}</p>
-      </CardContent>
-    </Card>
-  );
-}
-
-
-
-function ActionCard({
-  title,
-  description,
-  href,
-}: {
-  title: string;
-  description: string;
-  href: string;
-}) {
-  return (
-    <Link href={href}>
-      <Card className="group relative transition cursor-pointer
-  bg-card/80 backdrop-blur-sm
-  shadow-[0_8px_25px_-10px_rgba(59,130,246,0.25)]
-  hover:shadow-[0_16px_40px_-12px_rgba(59,130,246,0.4)]
-  hover:border-blue-500/40">
-
-        <CardContent className="pt-6 space-y-2">
-          <p className="font-semibold group-hover:text-primary">
-            {title}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {description}
-          </p>
-        </CardContent>
-      </Card>
-    </Link>
-  );
-}
-
-function ActivityCard({
-  title,
-  bookings,
-  emptyText,
-}: {
-  title: string;
-  bookings: any[];
-  emptyText: string;
-}) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        {bookings.length === 0 && (
-          <p className="text-sm text-muted-foreground text-center py-6">
-            {emptyText}
-          </p>
-        )}
-
-        {bookings.map((b) => (
-<div
-  key={b.id}
-  className="flex items-center justify-between rounded-lg border bg-background/60 p-3 hover:bg-background transition"
->
-
-            <div>
-              <p className="font-medium">
-                {b.rentals?.rental_name}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {new Date(b.created_at).toLocaleDateString()}
-              </p>
-            </div>
-            <div className="text-right space-y-1">
-              <Badge variant="secondary">{b.status}</Badge>
-              <p className="text-sm font-semibold">
-                ${b.total_price}
-              </p>
-            </div>
-          </div>
-        ))}
-      </CardContent>
-    </Card>
-  );
-}
-

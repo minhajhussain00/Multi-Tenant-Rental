@@ -16,7 +16,6 @@ import { User, Mail, Calendar, CreditCard, Home } from "lucide-react";
 export default async function ProfilePage() {
   const supabase = await createClient();
 
-  // Get authenticated user
   const {
     data: { user: authUser },
   } = await supabase.auth.getUser();
@@ -25,7 +24,6 @@ export default async function ProfilePage() {
     redirect("/auth/login");
   }
 
-  // Get profile data
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")
@@ -36,7 +34,6 @@ export default async function ProfilePage() {
     redirect("/auth/login");
   }
 
-  // Get user's listings count
   const { data: listings } = await supabase
     .from("rentals")
     .select("*")
@@ -71,7 +68,7 @@ export default async function ProfilePage() {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-5xl mx-auto space-y-6">
-        {/* Header */}
+    
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Profile</h1>
         </div>
@@ -144,7 +141,6 @@ export default async function ProfilePage() {
           </CardContent>
         </Card>
 
-        {/* Activity Statistics */}
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
