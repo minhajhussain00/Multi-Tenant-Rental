@@ -111,7 +111,7 @@ const Page = () => {
 
             <CardFooter>
               <Link
-                href={`/dashboard/request/handover/${item.id}`}
+                href={`/dashboard/handover/${item.id}`}
                 className="w-full"
               >
                 <Button className="w-full">
