@@ -45,8 +45,8 @@ const sidebarItems = [
     icon: GamepadIcon,
   },
   {
-    title: 'Calendar',
-    href: '/dashboard/calendar',
+    title: 'My Bookings',
+    href: '/dashboard/bookings',
     icon: Calendar,
   },
 

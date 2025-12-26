@@ -2,33 +2,50 @@ import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-    try{
-      console.log("hi")
+  try {
     const { searchParams } = new URL(req.url);
-    const ownerId = searchParams.get("owner_id");
-    const supabase = await createClient();
+    const userId = searchParams.get("user_id");
 
-    let {error,data}= await supabase
-        .from("rental_handovers")
-        .select("*")
-        .eq("owner", ownerId);
-
-    if (error) {
-      console.error("Supabase error fetching handovers:", error);
+    if (!userId) {
       return NextResponse.json(
-        { error: error.message },
-        { status: 404 }
+        { error: "user_id is required" },
+        { status: 400 }
       );
     }
 
-    return NextResponse.json(data, { status: 200 });
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("rental_handovers")
+      .select(`
+        *,
+        rental_id:rentals (
+          id,
+          rental_description,
+          price,
+          image_url
+        ),
+        booking_id:bookings(
+          created_at,
+          total_price,
+          status
+        )
+      `)
+      .eq("owner", userId);
+
+    if (error) {
+      console.error("Supabase error fetching bookings:", error);
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+
+    return NextResponse.json(data || [], { status: 200 });
   } catch (err: unknown) {
     let message = "Unknown error";
     if (err instanceof Error) {
       message = err.message;
-      console.error("GET /api/handover/ error:", err.message);
+      console.error("GET /api/bookings error:", err.message);
     } else {
-      console.error("GET /api/handover/ error:", err);
+      console.error("GET /api/bookings error:", err);
     }
 
     return NextResponse.json({ error: message }, { status: 500 });

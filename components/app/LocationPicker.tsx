@@ -39,7 +39,7 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
     iconSize: [28, 28],
   });
 
-  /* ---------------- Fetch + Realtime ---------------- */
+
 
   useEffect(() => {
     const fetch = async () => {
@@ -77,7 +77,6 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
   const isOwner = handover.owner_id === user?.id;
   const isRenter = handover.renting_user === user?.id;
 
-  /* ---------------- Actions ---------------- */
 
   const savePickupLocation = async () => {
     if (!coords) return toast.error("Select a pickup location");
@@ -144,8 +143,6 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
     toast.success("Rental returned");
   };
 
-  /* ---------------- Helpers ---------------- */
-
   const parseCoords = (value?: string) =>
     value
       ? {
@@ -157,8 +154,6 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
   const pickupCoords = parseCoords(handover.pickup_location);
   const returnCoords = parseCoords(handover.return_location);
 
-  /* ---------------- UI ---------------- */
-
   return (
     <Card className="p-4 h-[80vh]">
       <CardHeader>
@@ -168,6 +163,13 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
       </CardHeader>
 
       <CardContent className="space-y-6">
+        {!pickupCoords &&(
+          <p className="text-muted-foreground">
+            {isOwner
+              ? "Set a pickup location for the renter to pick up the rental."
+              : "Waiting for the owner to set a pickup location."}
+          </p>
+        )}
 
         {isOwner && !handover.pickup_location && (
           <>
@@ -230,7 +232,6 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
           </>
         )}
 
-        {/* OWNER → VIEW RETURN LOCATION */}
         {returnCoords && isOwner && (
           <>
             <p className="font-medium">Return location</p>

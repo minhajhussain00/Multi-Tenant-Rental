@@ -17,22 +17,34 @@ import Link from "next/link";
 const Page = () => {
     const { user } = useUserStore();
     const [bookings, setBookings] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (!user?.id) return;
 
         const load = async () => {
             try {
+                setLoading(true);
                 const response = await axios.get(`/api/bookings?user_id=${user.id}`);
                 console.log("Fetched bookings:", response.data);
                 setBookings(response.data);
+
             } catch (error) {
                 console.error("Failed to fetch bookings:", error);
+            }finally{
+                setLoading(false);
             }
         };
 
         load();
     }, [user?.id]);
+     if (loading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+      </div>
+    );
+  }
 
     return (
         <div className="p-6">
@@ -70,11 +82,11 @@ const Page = () => {
                         <CardFooter className="flex justify-end">
                             {!item.isHanded ? (
                                 <Button size="lg" className="bg-blue-600 text-white">
-                                    <Link className="text-white" href={`/dashboard/renting/handover/${item.rental_id.id}`}>View Chat</Link>  
+                                    <Link className="text-white" href={`/dashboard/handover/${item.rental_id.id}`}>View Chat</Link>  
                                 </Button>
                             ):(
                                 <Button size="lg" className="bg-blue-600 text-white">
-                                   <Link className="text-white" href={`/dashboard/renting/handover/${item.rental_id.id}`}>Send meetup location</Link>
+                                   <Link className="text-white" href={`/dashboard/handover/${item.rental_id.id}`}>Send meetup location</Link>
                                 </Button>
                             )
                             }

@@ -4,10 +4,6 @@ import { useEffect, useState } from "react";
 
 import { useUserStore } from "@/lib/stores/useUserStore";
 
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
 
 import ActivityCard from "@/components/dashboard/ActivityCard"
 import ActionCard from "@/components/dashboard/ActionCard";
@@ -29,7 +25,14 @@ export default function DashboardPage() {
   }, [user]);
 
   if (!user) return null;
-  if (loading) return <p className="p-6">Loading dashboard...</p>;
+  if (loading) {
+     return (
+       <div className="min-h-[60vh] flex items-center justify-center">
+         <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+       </div>
+     );
+   }
+
 
   return (
 <div className="space-y-10 px-6 pt-8 bg-muted/40 min-h-screen">
