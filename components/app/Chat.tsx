@@ -5,14 +5,15 @@ import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/lib/stores/useUserStore";
+// import { Message } from "@/lib/types/Messege";
 
 export default function ChatBox({ roomId }: { roomId?: string }) {
   const supabase = createClient();
   const { user } = useUserStore();
 
   const [messages, setMessages] = useState<any[]>([]);
-  const [newMessage, setNewMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [newMessage, setNewMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const messagesRef = useRef<HTMLDivElement | null>(null);
 
   const fetchMessages = async () => {

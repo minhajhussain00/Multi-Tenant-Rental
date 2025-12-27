@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+type Data = {
+  totalEarnings: number;
+  activeRentals: number;
+  rentedOutCount: number;
+  rentedCount: number;
+  recentOwnerBookings: any[];
+  recentRenterBookings: any[];
+}
 export async function GET() {
   const supabase = createClient();
 
@@ -63,7 +71,7 @@ export async function GET() {
       .limit(5),
   ]);
 
-  return NextResponse.json({
+  return NextResponse.json<Data>({
     totalEarnings: earnings.data?.total_earned ?? 0,
     activeRentals: activeRentals.count ?? 0,
     rentedOutCount: rentedOutCount.count ?? 0,

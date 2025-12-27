@@ -2,7 +2,7 @@
 
 import { useUserStore } from "@/lib/stores/useUserStore";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -17,11 +17,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 import { Calendar, MapPin, DollarSign } from "lucide-react";
+import type { Rental } from "@/lib/types/Rental";
 
 const Page = () => {
   const { user } = useUserStore();
   const [rentals, setRentals] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -68,7 +69,7 @@ const Page = () => {
             <div className="relative h-48">
               <Image
                 src={item.rental.image_url || "/images/placeholder.jpg"}
-                alt={item.rental.rental_name}
+                alt={item.rental.rental_name || "Rental image"}
                 fill
                 className="object-cover"
               />

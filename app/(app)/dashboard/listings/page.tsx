@@ -11,15 +11,15 @@ import {
 } from "@/components/ui/table";
 import TableData from "@/components/listingTable/TableData";
 import Link from "next/link";
-
+import type { Rental } from "@/lib/types/Rental";
 const Page = async () => {
   const supabase = await createClient();
-
   const { data } = await supabase.auth.getClaims()
   const { data: listings, error: erro2 } = await supabase
     .from('rentals')
     .select('*')
-    .eq('rental_owner', data?.claims?.sub);
+    .eq('rental_owner', data?.claims?.sub)
+
     
   if (erro2) {
     console.error(erro2);

@@ -1,20 +1,14 @@
 "use client"
 
 import { create } from "zustand"
+import { Profile } from "../types/UserProfile"
 
-export type User = {
-  id: string
-  renting: string[],
-  name: string,
-  image: string | "placeholder",
-  stripeId: string,
-} | null
 
 type State = {
-  user: User
+  user: Profile | null;
   loading: boolean
   error: string | null
-  setUser: (user: User) => void
+  setUser: (user: Profile | null) => void
   setLoading: (loading: boolean) => void
 }
 

@@ -17,7 +17,7 @@ import Link from "next/link";
 const Page = () => {
     const { user } = useUserStore();
     const [bookings, setBookings] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         if (!user?.id) return;

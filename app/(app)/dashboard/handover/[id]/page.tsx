@@ -2,7 +2,7 @@ import Chat from '@/components/app/Chat';
 
 import LocationPicker from '@/components/app/LocationPicker';
 import { createClient } from '@/lib/supabase/server';
-
+import type { HandOver } from '@/lib/types/HandOver';
 export default async function Page({ params }: {params:Promise<{id: string}>}) {
   const { id } = await params;
   
@@ -11,7 +11,7 @@ export default async function Page({ params }: {params:Promise<{id: string}>}) {
     .from("rental_handovers")
     .select("*")
     .eq("id", id)
-    .single();
+    .single<HandOver>();
     
   if (!handover) {
     return <div className='flex items-center justify-center h-[90vh]'>Handover not found.</div>;
