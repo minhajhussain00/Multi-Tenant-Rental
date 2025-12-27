@@ -9,24 +9,17 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
+
   CardContent,
   CardFooter,
 } from "@/components/ui/card"
-
-type RentalRow = {
-  id: string
-  rental_name: string
-  rental_description?: string | null
-  price: number
-  image_url?: string | null
-}
+import type { Rental } from "@/lib/types/Rental"
 export default function ExplorePage() {
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState<string>("")
   const [minPrice, setMinPrice] = useState<string>("")
   const [maxPrice, setMaxPrice] = useState<string>("")
-  const [listings, setListings] = useState<RentalRow[]>([])
-  const [loading, setLoading] = useState(false)
+  const [listings, setListings] = useState<Rental[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
 
   React.useEffect(() => {
@@ -36,7 +29,7 @@ export default function ExplorePage() {
       setError(null)
       try {
         const response = await axios.get("/api/rentals");
-        if (mounted) setListings((response.data ?? []) as RentalRow[])
+        if (mounted) setListings((response.data ?? []) as Rental[])
       } catch (err: unknown) {
         console.error("unexpected error fetching rentals", err)
         const msg = err instanceof Error ? err.message : String(err)
@@ -56,11 +49,11 @@ export default function ExplorePage() {
     return listings.filter((l) => {
       const matchesQuery =
         query.trim() === "" ||
-        l.rental_name.toLowerCase().includes(query.toLowerCase()) ||
+        (l.rental_name ?? "").toLowerCase().includes(query.toLowerCase()) ||
         (l.rental_description ?? "").toLowerCase().includes(query.toLowerCase())
 
       const matchesMin = minPrice === "" || l.price >= Number(minPrice)
-      const matchesMax = maxPrice === "" || l.price <= Number(maxPrice)
+      const matchesMax = maxPrice === "" || l.price  <= Number(maxPrice)
 
       return matchesQuery && matchesMin && matchesMax
     })
@@ -113,7 +106,7 @@ export default function ExplorePage() {
                 <div className="relative w-full h-48 bg-muted">
                   <Image
                     src={listing.image_url || "/images/placeholder.jpg"}
-                    alt={listing.rental_name}
+                    alt={listing.rental_name || "Rental image"}
                     fill
                     className="object-cover"
                   />

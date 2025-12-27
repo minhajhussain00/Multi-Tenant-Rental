@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
       .from("rentals")
       .select("*")
       .order("created_at", { ascending: false });
-
+      query = query.eq("isAvailable", true);
     if (ownerId) {
       query = query.eq("rental_owner", ownerId);
     }
