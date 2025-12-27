@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
-import type {  } from "@/lib/types/Messege";
+import type { Message } from "@/lib/types/Messege";
 
 
 
