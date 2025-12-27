@@ -23,7 +23,7 @@ import { toast } from "sonner";
 
 export default function AddRentalPage() {
   const [preview, setPreview] = useState<string | null>(null);
-  const [uploading, setUploading] = useState<true | false>(false);
+  const [uploading, setUploading] = useState<boolean>(false);
   const supabase = createClient();
   const form = useForm<AddRentalSchema>({
     resolver: zodResolver(addRentalSchema),

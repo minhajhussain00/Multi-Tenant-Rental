@@ -18,7 +18,7 @@ import type {Booking} from "@/lib/types/Booking";
 const BookingsPage = () => {
   const { user } = useUserStore();
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!user?.id) return;

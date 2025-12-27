@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,7 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
     const fetch = async () => {
       const { data } = await supabase
         .from("rental_handovers")
-        .select("*")
+        .select("*, booking:booking_id(*)")
         .eq("id", bookingId)
         .single();
       if (data) setHandover(data);
@@ -126,7 +126,7 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
 
     const { error: handoverError } = await supabase
       .from("rental_handovers")
-      .update({ isReturned: true })
+      .update({ isReturned: true , status: 'completed'})
       .eq("id", bookingId);
 
     if (handoverError) {
@@ -136,7 +136,7 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
 
     await supabase
       .from("rentals")
-      .update({ is_available: true })
+      .update({ isAvailable: true })
       .eq("id", handover.rental_id);
 
     setLoading(false);
@@ -208,7 +208,7 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
           </Button>
         )}
 
-        {handover.isHanded && !handover.isReturned && isRenter && (
+        {handover.isHanded && !handover.isReturned && isRenter && new Date(handover.booking.end_date).getTime() < Date.now() && (
           <>
             <p className="font-medium">Set return location</p>
             <MapContainer center={[0, 0]} zoom={3}>

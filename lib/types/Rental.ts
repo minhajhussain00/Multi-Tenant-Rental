@@ -3,7 +3,7 @@ export type Rental = {
   created_at?: string;
   rental_name?: string | null;
   rental_description?: string | null;
-  price?: number | null;
+  price: number ;
   image_url?: string | null;
   rental_owner?: string | null;
   isAvailable?: boolean;

@@ -25,7 +25,7 @@ export default function Page() {
 
   const [booking, setBooking] = useState<Booking | null>(null);
   const [rental, setRental] = useState<Rental | null>(null);
-  const [loading, setLoading] = useState<true|false>(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!id) return;
