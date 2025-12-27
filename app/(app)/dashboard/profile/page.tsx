@@ -1,9 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { EditProfileDialog } from "@/components/profile/EditProfileDialog";
 import type { Rental } from "@/lib/types/Rental";
-import type { Profile } from "@/lib/types/UserProfile";
 import {
   Card,
   CardContent,
@@ -98,7 +96,6 @@ export default async function ProfilePage() {
                 </CardDescription>
               </div>
             </div>
-            <EditProfileDialog />
           </CardHeader>
         </Card>
 
