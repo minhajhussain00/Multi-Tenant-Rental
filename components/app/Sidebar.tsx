@@ -1,13 +1,15 @@
 "use client"
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
+
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { Sheet, SheetContent, SheetTrigger,SheetTitle } from "@/components/ui/sheet"
+
 import {
   LayoutDashboard,
   Package,
@@ -18,68 +20,44 @@ import {
   Plus,
   Calendar,
   Menu,
-  GamepadIcon
-} from 'lucide-react'
-
+  GamepadIcon,
+} from "lucide-react"
 
 const sidebarItems = [
-  {
-    title: 'Overview',
-    href: '/dashboard',
-    icon: LayoutDashboard,
-  },
-  {
-    title: 'My Listings',
-    href: '/dashboard/listings',
-    icon: Package,
-
-  },
-  {
-    title: 'Rental Requests',
-    href: '/dashboard/request',
-    icon: ClipboardList,
-  },
-    {
-    title: 'Renting',
-    href: '/dashboard/renting',
-    icon: GamepadIcon,
-  },
-  {
-    title: 'My Bookings',
-    href: '/dashboard/bookings',
-    icon: Calendar,
-  },
-
-   ]
+  { title: "Overview", href: "/dashboard", icon: LayoutDashboard },
+  { title: "My Listings", href: "/dashboard/listings", icon: Package },
+  { title: "Rental Requests", href: "/dashboard/request", icon: ClipboardList },
+  { title: "Renting", href: "/dashboard/renting", icon: GamepadIcon },
+  { title: "My Bookings", href: "/dashboard/bookings", icon: Calendar },
+]
 
 const quickActions = [
-  {
-    title: 'New Listing',
-    href: '/dashboard/listings/new',
-    icon: Plus,
-  },
-  {
-    title: 'Notifications',
-    href: '/dashboard/notifications',
-    icon: Bell,
-  },
+  { title: "New Listing", href: "/dashboard/listings/new", icon: Plus },
+  { title: "Notifications", href: "/dashboard/notifications", icon: Bell },
 ]
+
 type SidebarCounts = {
   listings?: number
   requests?: number
 }
 
-const Sidebar = ({ counts }: { counts: SidebarCounts }) => {
-  const pathname = usePathname()
-  const [isOpen, setIsOpen] = useState(false)
-  const badgeMap: Record<string, number | undefined> = {
-    '/dashboard/listings': counts?.listings,
-    '/dashboard/requests': counts?.requests,
-  }
- const SidebarContent = () => (
+type SidebarContentProps = {
+  onLinkClick?: () => void
+  counts: SidebarCounts
+}
 
-    <div className="flex flex-col h-screen w-60 bg-card border-r mt-30">
-      <div className="flex-1 py-4 overflow-auto">
+const SidebarContent = ({ onLinkClick, counts }: SidebarContentProps) => {
+  const pathname = usePathname()
+
+  const badgeMap: Record<string, number | undefined> = {
+    "/dashboard/listings": counts.listings,
+    "/dashboard/request": counts.requests,
+  }
+
+  return (
+    <div className="flex flex-col h-screen w-60 bg-card border-r">
+      <div className="flex-1 overflow-auto py-4">
+        
         <nav className="space-y-1 px-2 py-6">
           {sidebarItems.map((item) => {
             const isActive = pathname === item.href
@@ -87,14 +65,16 @@ const Sidebar = ({ counts }: { counts: SidebarCounts }) => {
             const badgeCount = badgeMap[item.href]
 
             return (
-              <Link key={item.href} href={item.href}>
+              <Link key={item.href} href={item.href} onClick={onLinkClick}>
                 <Button
                   variant={isActive ? "secondary" : "ghost"}
                   className={cn("w-full justify-start", isActive && "bg-secondary")}
                 >
                   <Icon className="mr-3 h-4 w-4" />
                   <span className="flex-1 text-left">{item.title}</span>
-                  {badgeCount ? <Badge className="ml-auto">{badgeCount}</Badge> : null}
+                  {badgeCount ? (
+                    <Badge className="ml-auto">{badgeCount}</Badge>
+                  ) : null}
                 </Button>
               </Link>
             )
@@ -102,13 +82,14 @@ const Sidebar = ({ counts }: { counts: SidebarCounts }) => {
         </nav>
 
         <Separator className="my-4" />
+
         <div className="px-3">
           <h3 className="mb-2 px-3 text-sm font-medium text-muted-foreground">
             Quick Actions
           </h3>
           <nav className="space-y-1">
             {quickActions.map((item) => (
-              <Link key={item.href} href={item.href}>
+              <Link key={item.href} href={item.href} onClick={onLinkClick}>
                 <Button variant="ghost" className="w-full justify-start">
                   <item.icon className="mr-3 h-4 w-4" />
                   {item.title}
@@ -119,15 +100,17 @@ const Sidebar = ({ counts }: { counts: SidebarCounts }) => {
         </div>
 
         <Separator className="my-4" />
+
         <div className="px-3">
           <nav className="space-y-1">
-            <Link href="/dashboard/profile">
+            <Link href="/dashboard/profile" onClick={onLinkClick}>
               <Button variant="ghost" className="w-full justify-start">
                 <User className="mr-3 h-4 w-4" />
                 Profile
               </Button>
             </Link>
-            <Link href="/dashboard/settings">
+
+            <Link href="/dashboard/settings" onClick={onLinkClick}>
               <Button variant="ghost" className="w-full justify-start">
                 <Settings className="mr-3 h-4 w-4" />
                 Settings
@@ -138,33 +121,39 @@ const Sidebar = ({ counts }: { counts: SidebarCounts }) => {
       </div>
     </div>
   )
+}
 
+const Sidebar = ({ counts }: { counts: SidebarCounts }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   return (
     <>
-
-        <div className="lg:hidden fixed top-20 left-4 z-50">
+  
+      <div className="lg:hidden fixed top-25 left-4 z-50  ">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon">
-              <Menu className="h-5 w-5 " />
+            <Button variant={"secondary"} size="icon" className="w-20  shadow shadow-white" >
+              <Menu className="h-10 w-10 text-white" />
             </Button>
           </SheetTrigger>
-          <SheetTitle>   </SheetTitle>
-          <SheetContent side="left"      className="p-0 w-60 mt-20 bg-card/95 backdrop-blur-md shadow-lg">	
-            <SidebarContent />
+          <SheetTitle>  </SheetTitle>
+          <SheetContent
+            side="left"
+            className="p-0 w-60 mt-20 bg-card shadow-lg"
+          >
+            <SidebarContent
+              counts={counts}
+              onLinkClick={() => setIsOpen(false)}
+            />
           </SheetContent>
-        
         </Sheet>
       </div>
 
-
-  <div className="hidden lg:flex fixed top-10 left-0 h-screen w-60 z-40">
-        <SidebarContent />
+      <div className="hidden lg:flex fixed top-10 left-0 h-screen w-60 z-40">
+        <SidebarContent counts={counts} />
       </div>
     </>
   )
-
 }
 
 export default Sidebar
