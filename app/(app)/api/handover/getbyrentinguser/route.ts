@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { HandOver } from "@/lib/types/HandOver";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -14,14 +15,7 @@ export async function GET(req: Request) {
   const { data, error } = await (await supabase)
     .from("rental_handovers")
     .select(`
-      id,
-      created_at,
-      pickup_location,
-      return_location,
-      status,
-      isHanded,
-      isReturned,
-
+      *,
       rental:rental_id (
         id,
         rental_name,
@@ -44,6 +38,6 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json(data);
+  return NextResponse.json<HandOver[]>(data);
 }
 

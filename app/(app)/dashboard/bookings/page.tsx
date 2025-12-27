@@ -13,26 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-
-type Booking = {
-  id: string;
-  rental_id: {
-    id: number;
-    rental_name: string;
-    rental_description: string;
-    price: number;
-    image_url: string;
-  };
-  renting_user_id: string;
-  owner_id: string;
-  status: string;
-  start_date: string;
-  end_date: string;
-  total_price: number;
-  booking_expiry: string | null;
-  payment_status: string | null;
-  created_at: string;
-};
+import type {Booking} from "@/lib/types/Booking";
 
 const BookingsPage = () => {
   const { user } = useUserStore();
@@ -81,7 +62,7 @@ const BookingsPage = () => {
            <div className="relative h-48 rounded-md">
              <Image
                src={booking.rental_id.image_url || "/images/placeholder.jpg"}
-               alt={booking.rental_id.rental_name}
+               alt={booking?.rental_id?.rental_name ?? "Rental image"}
                fill
                className="object-cover  rounded-md"
              />

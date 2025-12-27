@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
-
+import type { Rental } from "@/lib/types/Rental";
 
 export async function GET(
   req: NextRequest,

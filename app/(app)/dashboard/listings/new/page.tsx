@@ -23,7 +23,7 @@ import { toast } from "sonner";
 
 export default function AddRentalPage() {
   const [preview, setPreview] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState<true | false>(false);
   const supabase = createClient();
   const form = useForm<AddRentalSchema>({
     resolver: zodResolver(addRentalSchema),
@@ -48,8 +48,6 @@ export default function AddRentalPage() {
     setUploading(true);
 
     let imageUrl = null;
-
-    // Still use Supabase client for storage (or create separate upload API)
     if (values.image) {
       const supabase = createClient();
       const file = values.image;
@@ -68,7 +66,6 @@ export default function AddRentalPage() {
       imageUrl = publicUrl.publicUrl;
     }
 
-    // Use axios to create rental via API
     await axios.post("/api/rentals", {
       rental_name: values.rental_name,
       rental_description: values.rental_description,
@@ -108,7 +105,7 @@ export default function AddRentalPage() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-          {/* Rental Name */}
+        
           <FormField
             control={form.control}
             name="rental_name"
@@ -159,7 +156,6 @@ export default function AddRentalPage() {
             )}
           />
 
-          {/* Image Upload */}
           <FormField
             control={form.control}
             name="image"

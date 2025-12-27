@@ -14,30 +14,18 @@ import {
 import Image from "next/image";
 import { useUserStore } from "@/lib/stores/useUserStore";
 import axios from "axios";
+import type { Rental } from "@/lib/types/Rental";
+import type { Booking } from "@/lib/types/Booking";
 
-interface Booking {
-  id: string;
-  rental_id: string;
-  total_price?: number;
-  status?: string;
-}
-
-interface Rental {
-  id: string;
-  title?: string;
-  description?: string;
-  image_url?: string;
-  rental_name?: string;
-}
 
 export default function Page() {
-  const { id } = useParams(); // <-- ✅ Correct way in Client Component
+  const { id } = useParams();
   const router = useRouter();
   const { user } = useUserStore();
 
   const [booking, setBooking] = useState<Booking | null>(null);
   const [rental, setRental] = useState<Rental | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<true|false>(true);
 
   useEffect(() => {
     if (!id) return;
@@ -92,7 +80,7 @@ export default function Page() {
     try {
       const res = await axios.post("/api/checkout", {
         price: Math.floor(booking?.total_price ?? 0),
-        stripeId: user?.stripeId,
+        stripeId: user?.stripe_customer_id,
         name: rental?.rental_name,
         rentalId: rental?.id,
         booking_id: booking?.id,
@@ -122,7 +110,7 @@ export default function Page() {
           <div className="relative w-full h-64 sm:h-80">
             <Image
               src={rental.image_url}
-              alt={rental.title || "Rental image"}
+              alt={rental.rental_name || "Rental image"}
               fill
               className="object-cover"
             />
@@ -131,9 +119,9 @@ export default function Page() {
 
         <CardHeader>
           <CardTitle className="text-2xl font-semibold">
-            {rental.title || "Rental Details"}
+            {rental.rental_name || "Rental Details"}
           </CardTitle>
-          <CardDescription>{rental.description}</CardDescription>
+          <CardDescription>{rental.rental_description}</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-4 text-sm sm:text-base">

@@ -1,34 +1,22 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { RentNowButton } from "../../../../components/RentNowButton";
 import { toast } from "sonner";
+import type { Rental } from "@/lib/types/Rental";
+import type { Profile } from "@/lib/types/UserProfile";
 
 interface RentalDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-interface Rental {
-  id: string;
-  rental_name: string;
-  rental_description?: string;
-  price: number;
-  image_url?: string;
-  rental_owner: string;
-}
-
-interface Owner {
-  id: string;
-  name: string;
-  image_url?: string;
-}
 
 export default function RentalDetailPage({ params }: RentalDetailPageProps) {
   const [id, setId] = useState<string>("");
   const [rental, setRental] = useState<Rental | null>(null);
-  const [owner, setOwner] = useState<Owner | null>(null);
+  const [owner, setOwner] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -82,7 +70,7 @@ export default function RentalDetailPage({ params }: RentalDetailPageProps) {
         <div className="relative w-full h-[28rem] rounded-3xl overflow-hidden shadow-xl border border-zinc-800">
           <Image
             src={rental.image_url || "/images/placeholder.jpg"}
-            alt={rental.rental_name}
+            alt={rental.rental_name || "Rental image"}
             fill
             className="object-cover transition-transform duration-500 hover:scale-105"
             priority
@@ -108,8 +96,8 @@ export default function RentalDetailPage({ params }: RentalDetailPageProps) {
             </span>
 
             <RentNowButton
-              rentalId={rental.id}
-              price={rental.price}
+              rentalId={rental.id ?? 0}
+              price={rental.price ?? 0}
               owner_id={owner?.id ?? ""}
             />
           </div>
@@ -118,7 +106,7 @@ export default function RentalDetailPage({ params }: RentalDetailPageProps) {
             <div className="border-t border-zinc-800 pt-6 flex items-center gap-4">
               <Image
                 src={owner.image_url || "/images/default-avatar.png"}
-                alt={owner.name}
+                alt={owner.name  || "Owner image"}
                 width={64}
                 height={64}
                 className="rounded-full object-cover ring-2 ring-fuchsia-600/30"

@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
-
+import type { Booking } from "@/lib/types/Booking";
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
    
-    return NextResponse.json(data || [], { status: 200 });
+    return NextResponse.json<Booking[]>(data || [], { status: 200 });
   } catch (err: unknown) {
     let message = "Unknown error";
     if (err instanceof Error) {

@@ -21,7 +21,7 @@ import { type DateRange } from "react-day-picker";
 import { differenceInCalendarDays } from "date-fns";
 
 interface RentNowButtonProps {
-  rentalId: string;
+  rentalId: number ;
   price: number;
   owner_id: string;
 }

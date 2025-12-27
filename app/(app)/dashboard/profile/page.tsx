@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { EditProfileDialog } from "@/components/profile/EditProfileDialog";
+import type { Rental } from "@/lib/types/Rental";
 import {
   Card,
   CardContent,
@@ -39,8 +39,8 @@ export default async function ProfilePage() {
     .select("*")
     .eq("rental_owner", authUser.id);
 
-  const rentingIds = profile.renting || [];
-  let currentRentals = [];
+  const rentingIds: number[] = profile.renting ?? [];
+  let currentRentals: Rental[] = [];
   if (rentingIds.length > 0) {
     const { data } = await supabase
       .from("rentals")
@@ -79,8 +79,8 @@ export default async function ProfilePage() {
               <Avatar className="h-20 w-20">
                 <AvatarImage
                   src={
-                    profile.image && profile.image !== "placeholder"
-                      ? profile.image
+                    profile.image_url && profile.image_url !== "placeholder"
+                      ? profile.image_url
                       : undefined
                   }
                   alt={profile.name}
@@ -96,7 +96,6 @@ export default async function ProfilePage() {
                 </CardDescription>
               </div>
             </div>
-            <EditProfileDialog />
           </CardHeader>
         </Card>
 
@@ -125,7 +124,7 @@ export default async function ProfilePage() {
               <div>
                 <p className="text-sm font-medium">Stripe ID</p>
                 <p className="text-sm text-muted-foreground">
-                  {profile.stripeId || "Not connected"}
+                  {profile.stripe_customer_id || "Not connected"}
                 </p>
               </div>
             </div>
@@ -199,7 +198,7 @@ export default async function ProfilePage() {
                       {rental.image_url && (
                         <Image
                           src={rental.image_url}
-                          alt={rental.rental_name}
+                          alt={rental.rental_name || "Rental image"}
                           width={64}
                           height={64}
                           className="h-16 w-16 rounded-lg object-cover"
