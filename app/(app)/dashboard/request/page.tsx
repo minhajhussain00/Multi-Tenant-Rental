@@ -25,7 +25,7 @@ const Page = () => {
         const load = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get(`/api/bookings?user_id=${user.id}`);
+                const response = await axios.get(`/api/handover?user_id=${user.id}`);
                 console.log("Fetched bookings:", response.data);
                 setBookings(response.data);
 
