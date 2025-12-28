@@ -18,7 +18,7 @@ export default async function Page({ params }: {params:Promise<{id: string}>}) {
   }
 
   return (
-<div className="flex flex-wrap items-center justify-center h-[90vh] p-5 w-full ">
+<div className="flex flex-wrap items-center justify-center h-[88vh] p-5 w-full ">
 
   <div className="basis-full md:basis-1/2 order-1 md:order-1 ">
     <Chat roomId={id} />

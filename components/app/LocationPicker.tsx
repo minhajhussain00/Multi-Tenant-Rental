@@ -74,7 +74,7 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
 
   if (!handover) return <p>Loading…</p>;
 
-  const isOwner = handover.owner_id === user?.id;
+  const isOwner = handover.owner === user?.id;
   const isRenter = handover.renting_user === user?.id;
 
 
@@ -126,7 +126,7 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
 
     const { error: handoverError } = await supabase
       .from("rental_handovers")
-      .update({ isReturned: true , status: 'completed'})
+      .update({ isReturned: true, status: 'completed' })
       .eq("id", bookingId);
 
     if (handoverError) {
@@ -146,13 +146,15 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
   const parseCoords = (value?: string) =>
     value
       ? {
-          lat: Number(value.split(",")[0]),
-          lng: Number(value.split(",")[1]),
-        }
+        lat: Number(value.split(",")[0]),
+        lng: Number(value.split(",")[1]),
+      }
       : null;
 
   const pickupCoords = parseCoords(handover.pickup_location);
   const returnCoords = parseCoords(handover.return_location);
+  console.log(pickupCoords, returnCoords)
+  console.log("is Owner " + isOwner)
 
   return (
     <Card className="p-4 h-[80vh]">
@@ -163,7 +165,7 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
       </CardHeader>
 
       <CardContent className="space-y-6">
-        {!pickupCoords &&(
+        {!pickupCoords && (
           <p className="text-muted-foreground">
             {isOwner
               ? "Set a pickup location for the renter to pick up the rental."
@@ -203,12 +205,20 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
         )}
 
         {pickupCoords && !handover.isHanded && isOwner && (
-          <Button disabled={loading} onClick={markAsHanded}>
-            Confirm handover
-          </Button>
+          <>
+            <MapContainer center={[pickupCoords.lat, pickupCoords.lng]} zoom={15}>
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              <Marker position={[pickupCoords.lat, pickupCoords.lng]} icon={markerIcon} />
+            </MapContainer>
+            <Button disabled={loading} onClick={markAsHanded}>
+              Confirm handover
+            </Button>
+          </>
         )}
-
-        {handover.isHanded && !handover.isReturned && isRenter && new Date(handover.booking.end_date).getTime() < Date.now() && (
+        {handover.isHanded && !handover.isReturned && isRenter && new Date(handover.booking?.end_date).getTime() > Date.now() && (
+          <h1>set return location once booking date is filled</h1>
+        )}
+        {handover.isHanded && !handover.isReturned && isRenter && new Date(handover.booking?.end_date).getTime() < Date.now() && (
           <>
             <p className="font-medium">Set return location</p>
             <MapContainer center={[0, 0]} zoom={3}>
