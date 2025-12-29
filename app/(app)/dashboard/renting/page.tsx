@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 import { Calendar, MapPin, DollarSign } from "lucide-react";
-import type { Rental } from "@/lib/types/Rental";
+
 
 const Page = () => {
   const { user } = useUserStore();
@@ -116,7 +116,7 @@ const Page = () => {
                 className="w-full"
               >
                 <Button className="w-full">
-                  {item.return_location
+                  {item.return_location && new Date(item.booking?.end_date).getTime() < Date.now()
                     ? "View Handover"
                     : "Set Return Locations"}
                 </Button>

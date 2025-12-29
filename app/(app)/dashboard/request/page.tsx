@@ -81,11 +81,11 @@ const Page = () => {
 
                         <CardFooter className="flex justify-end">
                             {!item.isHanded ? (
-                                <Button size="lg" className="bg-blue-600 text-white">
+                                <Button size="lg" className="bg-blue-600 text-white hover:bg-blue-700">
                                     <Link className="text-white" href={`/dashboard/handover/${item.rental_id.id}`}>View Chat</Link>  
                                 </Button>
                             ):(
-                                <Button size="lg" className="bg-blue-600 text-white">
+                                <Button size="lg" className="bg-blue-600 text-white hover:bg-blue-700">
                                    <Link className="text-white" href={`/dashboard/handover/${item.rental_id.id}`}>Send meetup location</Link>
                                 </Button>
                             )
