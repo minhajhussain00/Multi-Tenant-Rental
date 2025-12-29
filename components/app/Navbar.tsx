@@ -24,7 +24,7 @@ export default function Navbar() {
   const { user, setUser } = useUserStore()
   const supabase = createClient()
   const router = useRouter()
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState<boolean>(false)
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut()
@@ -57,7 +57,7 @@ export default function Navbar() {
     <div className="flex flex-col md:flex-row gap-2">
       {user ? (
        <div className="flex items-center gap-4">
-        <Link href="/profile" className="flex items-center gap-2">
+        <Link href="/dashboard/profile" className="flex items-center gap-2">
           <Avatar>
             <img src={user?.image_url || ''} alt={user.name || 'User Avatar'} />
           </Avatar>
