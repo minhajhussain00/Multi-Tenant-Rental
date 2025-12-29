@@ -121,7 +121,7 @@ export default function Page() {
           <CardTitle className="text-2xl font-semibold">
             {rental.rental_name || "Rental Details"}
           </CardTitle>
-          <CardDescription>{rental.rental_description}</CardDescription>
+
         </CardHeader>
 
         <CardContent className="space-y-4 text-sm sm:text-base">
