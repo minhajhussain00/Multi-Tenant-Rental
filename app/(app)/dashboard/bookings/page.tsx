@@ -96,7 +96,7 @@ const BookingsPage = () => {
               </span>{" "}
               {booking.payment_status ?? "unpaid"}
             </p>
-            {booking.payment_status === "unpaid" && (
+            {!booking.payment_status && (
               <Link href={`/bookings/${booking.id}`} className="block mt-5">
                 <Button>Complete Payment</Button>
               </Link>
