@@ -115,7 +115,7 @@ export default function ExplorePage() {
                   <CardTitle>{listing.rental_name}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-sm text-muted-foreground">{listing.price ? `$${listing.price}/mo` : ""}</div>
+                  <div className="text-sm text-muted-foreground">{listing.price ? `$${listing.price}/day` : ""}</div>
                 </CardContent>
                 <CardFooter className="justify-between">
                   <Link href={`/rentals/${listing.id}`} className="">
