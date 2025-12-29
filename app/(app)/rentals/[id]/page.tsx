@@ -45,7 +45,7 @@ export default function RentalDetailPage({ params }: RentalDetailPageProps) {
 
   if (loading) {
     return (
-      <main className="min-h-[90vh] bg-gradient-to-b from-zinc-950 to-black text-white py-24 px-6 flex items-center justify-center">
+      <main className="min-h-[85vh] bg-gradient-to-b from-zinc-950 to-black text-white py-24 px-6 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-flex items-center justify-center mb-4">
             <div className="w-12 h-12 border-4 border-fuchsia-400/30 border-t-fuchsia-400 rounded-full animate-spin"></div>
@@ -65,7 +65,7 @@ export default function RentalDetailPage({ params }: RentalDetailPageProps) {
   }
 
   return (
-    <main className="min-h-[90vh] bg-gradient-to-b from-zinc-950 to-black text-white py-24 px-6">
+    <main className="min-h-[85vh] bg-gradient-to-b from-zinc-950 to-black text-white py-24 px-6">
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-14">
         <div className="relative w-full h-[28rem] rounded-3xl overflow-hidden shadow-xl border border-zinc-800">
           <Image

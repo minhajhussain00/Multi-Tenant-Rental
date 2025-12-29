@@ -35,9 +35,9 @@ const DashboardLayout = async ({
   }
 
   const { data: handoversRenterData, error: handoversRenterError } = await supabase
-    .from('rental_handovers')
+    .from('bookings')
     .select('*')
-    .eq('owner', user.id)
+    .eq('renting_user_id', user.id)
 
   if (handoversRenterError) {
     console.error('Supabase error fetching handovers for dashboard layout:', handoversRenterError)
@@ -45,6 +45,7 @@ const DashboardLayout = async ({
   const listings = listingsData ?? []
   const handovers = handoversData ?? []
   const Renting = handoversRenterData ?? []
+  console.log(Renting)
 
   return (
     <div className="flex ">

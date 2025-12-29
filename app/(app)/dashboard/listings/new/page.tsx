@@ -99,7 +99,7 @@ export default function AddRentalPage() {
 
 
   return (
- <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10 bg-background text-foreground">
+ <div className="min-h-[85vh] flex flex-col items-center justify-center px-4 py-10 bg-background text-foreground">
     <div className="w-full max-w-md bg-card border border-border rounded-2xl shadow-lg p-6">
       <h1 className="text-2xl font-semibold text-center mb-6">Add Rental</h1>
 
