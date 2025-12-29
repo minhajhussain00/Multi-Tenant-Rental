@@ -18,8 +18,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-lg md:text-xl text-gray-300 mb-8">
-              Experience next-level gaming gear — rent premium PCs, VR sets, and consoles
-              from trusted vendors on our multi-tenant platform.
+              Experience next-level gaming gear — rent premium PCs, VR sets, and consoles.
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center">
