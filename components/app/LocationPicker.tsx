@@ -216,7 +216,9 @@ export default function RentalHandover({ bookingId }: { bookingId: string }) {
           </>
         )}
         {handover.isHanded && !handover.isReturned && isRenter && new Date(handover.booking?.end_date).getTime() > Date.now() && (
-          <h1>set return location once booking date is filled</h1>
+          <p className="text-muted-foreground">
+            Return location will be available once the rental period ends.
+          </p>
         )}
         {handover.isHanded && !handover.isReturned && isRenter && new Date(handover.booking?.end_date).getTime() < Date.now() && (
           <>
