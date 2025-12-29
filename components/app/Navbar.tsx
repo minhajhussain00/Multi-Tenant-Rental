@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { createClient } from '@/lib/supabase/client'
 import { useUserStore } from '@/lib/stores/useUserStore'
 import { useRouter } from 'next/navigation'
+
 import {
   Home,
   Compass,
@@ -17,6 +18,7 @@ import {
   Rocket,
   Menu,
 } from 'lucide-react'
+import { Avatar } from '../ui/avatar'
 
 export default function Navbar() {
   const { user, setUser } = useUserStore()
@@ -54,6 +56,13 @@ export default function Navbar() {
   const AuthButtons = () => (
     <div className="flex flex-col md:flex-row gap-2">
       {user ? (
+       <div className="flex items-center gap-4">
+        <Link href="/profile" className="flex items-center gap-2">
+          <Avatar>
+            <img src={user?.image_url || ''} alt={user.name || 'User Avatar'} />
+          </Avatar>
+          <span className="hidden md:inline capitalize text-xl font-semibold text-center">{user.name || 'Profile'}</span>
+        </Link>
         <Button
           variant="outline"
           size="sm"
@@ -62,6 +71,7 @@ export default function Navbar() {
         >
           <LogOut size={16} /> Logout
         </Button>
+       </div>
       ) : (
         <>
           <Link href="/auth/login">
