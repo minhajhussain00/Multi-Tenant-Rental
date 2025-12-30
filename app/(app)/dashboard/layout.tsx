@@ -44,7 +44,7 @@ const DashboardLayout = async ({
     console.error('Supabase error fetching handovers for dashboard layout:', handoversRenterError)
   }  
   const { data: Booking, error: bookingsError } = await supabase
-    .from('rental_handovers')
+    .from('bookings')
     .select('*')
     .eq('renting_user_id', user.id)
     .eq("payment_status", null)

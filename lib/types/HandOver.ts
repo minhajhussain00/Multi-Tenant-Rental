@@ -3,7 +3,7 @@ import { Rental } from "./Rental";
 import { Profile } from "./UserProfile";
 
 export type HandOver = {
-  id: number | null;
+  id: string | null;
   created_at?: string;
   pickup_location: string | null;
   status: string;

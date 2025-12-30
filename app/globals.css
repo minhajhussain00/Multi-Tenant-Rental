@@ -89,3 +89,20 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(189, 188, 188); 
 }
+
+.animate-gradient-slow {
+  background-size: 200% 200%;
+  animation: gradient-shift 12s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
