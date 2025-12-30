@@ -66,15 +66,14 @@ const Page = () => {
 
                         <CardHeader>
                             <CardDescription>
-                                {item.rental_id?.rental_description}
+                              
                             </CardDescription>
                         </CardHeader>
 
                         <CardContent>
                             <p className="text-lg font-medium text-white">Price</p>
                             <p className="text-sm font-semibold text-gray-500">{item.booking_id?.total_price} </p>
-                            <p className="text-lg font-medium text-white">Status</p>
-                            <p className="text-sm font-semibold text-gray-500">{item.booking_id?.status} </p>
+
                             <p className="text-lg font-medium text-white">Booking Date</p>
                             <p className="text-sm font-semibold text-gray-500">{item.booking_id?.created_at.toString()} </p>
                         </CardContent>
@@ -82,11 +81,11 @@ const Page = () => {
                         <CardFooter className="flex justify-end">
                             {!item.isHanded ? (
                                 <Button size="lg" className="bg-blue-600 text-white hover:bg-blue-700">
-                                    <Link className="text-white" href={`/dashboard/handover/${item.rental_id.id}`}>View Chat</Link>  
+                                    <Link className="text-white" href={`/dashboard/handover/${item.id}`}>View Chat</Link>  
                                 </Button>
                             ):(
                                 <Button size="lg" className="bg-blue-600 text-white hover:bg-blue-700">
-                                   <Link className="text-white" href={`/dashboard/handover/${item.rental_id.id}`}>Send meetup location</Link>
+                                   <Link className="text-white" href={`/dashboard/handover/${item.id}`}>Send meetup location</Link>
                                 </Button>
                             )
                             }
