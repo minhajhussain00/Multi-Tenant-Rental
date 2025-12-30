@@ -160,7 +160,7 @@ export function RentNowButton({ rentalId, price, owner_id }: RentNowButtonProps)
             onClick={handleRent}
             className="bg-gradient-to-r from-fuchsia-500 to-cyan-500 text-white font-semibold hover:opacity-90 transition"
           >
-            Checkout
+            Book
           </Button>
         </DialogFooter>
       </DialogContent>

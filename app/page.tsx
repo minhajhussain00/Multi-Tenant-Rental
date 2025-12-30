@@ -2,15 +2,75 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Gamepad2, Store, Wallet } from "lucide-react";
+import { Gamepad2, Store, Wallet, Search, ShoppingCart, RotateCcw } from "lucide-react";
 import { Vortex } from "@/components/ui/vortex";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
+import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
+
+const steps = [
+  {
+    title: "Browse",
+    description: "Find gaming gear from top-rated local vendors.",
+    content: (
+      <Card className="h-full w-full bg-gradient-to-br from-gray-900 to-black border border-cyan-500/20 flex items-center justify-center mt-30">
+        <div className="text-center">
+          <Search className="mx-auto mb-4 h-12 w-12 text-cyan-400" />
+          <h4 className="text-3xl font-bold bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+            1
+          </h4>
+        </div>
+      </Card>
+    ),
+  },
+  {
+    title: "Rent",
+    description: "Choose your rental period and pay securely online.",
+    content: (
+      <Card className="h-full w-full bg-gradient-to-br from-gray-900 to-black border border-cyan-500/20 flex items-center justify-center">
+        <div className="text-center">
+          <ShoppingCart className="mx-auto mb-4 h-12 w-12 text-cyan-400" />
+          <h4 className="text-3xl font-bold bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+            2
+          </h4>
+        </div>
+      </Card>
+    ),
+  },
+  {
+    title: "Play",
+    description: "Pick up or get it delivered — and game like never before!",
+    content: (
+      <Card className="h-full w-full bg-gradient-to-br from-gray-900 to-black border border-cyan-500/20 flex items-center justify-center">
+        <div className="text-center">
+          <Gamepad2 className="mx-auto mb-4 h-12 w-12 text-cyan-400" />
+          <h4 className="text-3xl font-bold bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+            3
+          </h4>
+        </div>
+      </Card>
+    ),
+  },
+  {
+    title: "Return",
+    description: "Return the equipment once you’re done.",
+    content: (
+      <Card className="h-full w-full bg-gradient-to-br from-gray-900 to-black border border-cyan-500/20 flex items-center justify-center">
+        <div className="text-center">
+          <RotateCcw className="mx-auto mb-4 h-12 w-12 text-cyan-400" />
+          <h4 className="text-3xl font-bold bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+            4
+          </h4>
+        </div>
+      </Card>
+    ),
+  },
+];
 export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col  text-foreground">
       <section className=" min-h-screen w-full bg-black text-white overflow-hidden flex items-center justify-center">
-        <Vortex backgroundColor="black" className="flex items-center flex-col justify-center  w-full h-[90vh]" >
+        {/* <Vortex backgroundColor="black" className="flex items-center flex-col justify-center  w-full h-[90vh]" > */}
 
           <div className=" max-w-4xl px-6 text-center mx-auto flex flex-col items-center">
             <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-blue-500 bg-clip-text text-transparent animate-gradient-slow">
@@ -31,14 +91,10 @@ export default function HomePage() {
               </Button>
             </div>
           </div>
-        </Vortex>
-        <ShootingStars/>
-         <ShootingStars/>
-      <StarsBackground/>
+        {/* </Vortex> */}
+        {/* {/* <ShootingStars /> */}
+        {/* <StarsBackground /> */} 
       </section>
-
-
-
 
       <section
         id="features"
@@ -77,57 +133,28 @@ export default function HomePage() {
               </CardDescription>
             </CardHeader>
           </Card>
-        
+
         </div>
+          <ShootingStars />
       </section>
 
       <section
         id="how"
-        className="py-24 px-6 bg-gradient-to-t from-black via-[#0b0b0b] to-[#020202]"
+        className="relative py-24 px-6 bg-gradient-to-t from-black via-[#0b0b0b] to-[#020202]"
       >
-       
-        <h3 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-green-400 via-cyan-400 to-fuchsia-500 bg-clip-text text-transparent animate-gradient-slow">
+        <h3 className="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-green-400 via-cyan-400 to-fuchsia-500 bg-clip-text text-transparent animate-gradient-slow">
           How It Works
         </h3>
-        <div className="grid md:grid-cols-4 gap-8 max-w-7xl mx-auto">
-          {[
-            {
-              num: "1",
-              title: "Browse",
-              desc: "Find gaming gear from top-rated local vendors."
-            },
-            {
-              num: "2",
-              title: "Rent",
-              desc: "Choose your rental period and pay securely online."
-            },
-            {
-              num: "3",
-              title: "Play",
-              desc: "Pick up or get it delivered — and game like never before!"
-            },
-            {
-              num: "4",
-              title: "Return",
-              desc: "Return the equipment."
-            }
-          ].map((step, i) => (
-            <Card
-              key={i}
-              className="bg-gradient-to-br from-gray-900 to-black border border-cyan-500/20 hover:border-cyan-400/40 transition text-center"
-            >
-              <CardHeader>
-                <CardTitle className="text-4xl mb-2 bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
-                  {step.num}
-                </CardTitle>
-                <CardTitle>{step.title}</CardTitle>
-                <CardDescription className="text-gray-300">
-                  {step.desc}
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          ))}
+
+
+        <div className="absolute inset-0 flex justify-center pointer-events-none">
+          <div className="w-[600px] h-[600px] blur-3xl rounded-full  " />
         </div>
+
+<div className="relative max-w-6xl mx-auto min-h-[160vh] mt-70">
+  <StickyScroll content={steps} />
+</div>
+
       </section>
       <section
         id="cta"
@@ -159,7 +186,7 @@ export default function HomePage() {
         <p>© {new Date().getFullYear()} GameRent. All rights reserved.</p>
       </footer>
 
-      
+
     </main>
   );
 }

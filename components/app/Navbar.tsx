@@ -39,9 +39,7 @@ export default function Navbar() {
 
   const NavLinks = () => (
     <div className="flex flex-col md:flex-row md:items-center gap-4 text-sm font-medium">
-      <Link href="/" className="flex items-center gap-2 hover:text-primary transition-colors">
-        <Home size={16} /> Home
-      </Link>
+
       <Link href="/explore" className="flex items-center gap-2 hover:text-primary transition-colors">
         <Compass size={16} /> Explore
       </Link>
@@ -90,7 +88,7 @@ export default function Navbar() {
   )
 
   return (
-    <nav className="fixed top-0 left-0 w-full flex items-center justify-between px-6 py-5 border-b bg-background/80 backdrop-blur-md z-50">
+    <nav className="fixed top-0 left-0 w-full flex items-center justify-between px-10 py-5 border-b bg-background/80 backdrop-blur-md z-50">
       <Link href="/" className="flex items-center gap-2 font-semibold text-xl">
         <Rocket className="w-5 h-5 text-primary" />
         Game Rent
