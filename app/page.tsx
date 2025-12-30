@@ -70,7 +70,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col  text-foreground">
       <section className=" min-h-screen w-full bg-black text-white overflow-hidden flex items-center justify-center">
-        {/* <Vortex backgroundColor="black" className="flex items-center flex-col justify-center  w-full h-[90vh]" > */}
+        <Vortex backgroundColor="black" className="flex items-center flex-col justify-center  w-full h-[90vh]" >
 
           <div className=" max-w-4xl px-6 text-center mx-auto flex flex-col items-center">
             <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-blue-500 bg-clip-text text-transparent animate-gradient-slow">
@@ -91,9 +91,9 @@ export default function HomePage() {
               </Button>
             </div>
           </div>
-        {/* </Vortex> */}
-        {/* {/* <ShootingStars /> */}
-        {/* <StarsBackground /> */} 
+        </Vortex>
+         <ShootingStars />
+        <StarsBackground /> 
       </section>
 
       <section
@@ -135,7 +135,7 @@ export default function HomePage() {
           </Card>
 
         </div>
-          <ShootingStars />
+
       </section>
 
       <section
@@ -151,9 +151,9 @@ export default function HomePage() {
           <div className="w-[600px] h-[600px] blur-3xl rounded-full  " />
         </div>
 
-<div className="relative max-w-6xl mx-auto min-h-[160vh] mt-70">
-  <StickyScroll content={steps} />
-</div>
+      <div className="relative max-w-6xl mx-auto min-h-[110vh] mt-70">
+        <StickyScroll content={steps} />
+      </div>
 
       </section>
       <section
