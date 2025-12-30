@@ -13,7 +13,7 @@ export default function HomePage() {
         <Vortex backgroundColor="black" className="flex items-center flex-col justify-center  w-full h-[90vh]" >
 
           <div className=" max-w-4xl px-6 text-center mx-auto flex flex-col items-center">
-            <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-blue-500 bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-blue-500 bg-clip-text text-transparent animate-gradient-slow">
               Rent. Play. Dominate.
             </h1>
 
@@ -42,8 +42,9 @@ export default function HomePage() {
 
       <section
         id="features"
+        className="py-24 px-6 "
       >
-        <h3 className="text-3xl font-bold text-center mb-12 ">
+        <h3 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-blue-500 bg-clip-text text-transparent animate-gradient-slow  py-5">
           Why Choose GameRent?
         </h3>
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -85,7 +86,7 @@ export default function HomePage() {
         className="py-24 px-6 bg-gradient-to-t from-black via-[#0b0b0b] to-[#020202]"
       >
        
-        <h3 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-green-400 via-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
+        <h3 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-green-400 via-cyan-400 to-fuchsia-500 bg-clip-text text-transparent animate-gradient-slow">
           How It Works
         </h3>
         <div className="grid md:grid-cols-4 gap-8 max-w-7xl mx-auto">
@@ -132,7 +133,7 @@ export default function HomePage() {
         id="cta"
         className="py-24 px-6 text-center "
       >
-        <h3 className="text-4xl font-extrabold mb-4 text-black">
+        <h3 className="text-4xl font-extrabold mb-4 text-white">
           Level Up Your Gaming Setup
         </h3>
         <p className="text-lg  max-w-2xl mx-auto mb-8">

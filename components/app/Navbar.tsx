@@ -61,7 +61,7 @@ export default function Navbar() {
           <Avatar>
             <img src={user?.image_url || ''} alt={user.name || 'User Avatar'} />
           </Avatar>
-          <span className="hidden md:inline capitalize text-xl font-semibold text-center">{user.name || 'Profile'}</span>
+          <span className="hidden md:inline capitalize text-base font-semibold text-center">{user.name || 'Profile'}</span>
         </Link>
         <Button
           variant="outline"
