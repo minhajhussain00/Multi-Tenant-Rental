@@ -40,6 +40,7 @@ type SidebarCounts = {
   listings?: number
   requests?: number;
   rentings?: number;
+  bookings?: number;
 }
 
 type SidebarContentProps = {
@@ -54,6 +55,7 @@ const SidebarContent = ({ onLinkClick, counts }: SidebarContentProps) => {
     "/dashboard/listings": counts.listings,
     "/dashboard/request": counts.requests,
     "/dashboard/renting": counts.rentings,
+    "/dashboard/bookings": counts.bookings,
   }
 
   return (
