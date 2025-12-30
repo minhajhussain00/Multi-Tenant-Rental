@@ -35,17 +35,29 @@ const DashboardLayout = async ({
   }
 
   const { data: handoversRenterData, error: handoversRenterError } = await supabase
-    .from('bookings')
+    .from('rental_handovers')
     .select('*')
-    .eq('renting_user_id', user.id)
+    .eq('renting_user', user.id)
+
 
   if (handoversRenterError) {
     console.error('Supabase error fetching handovers for dashboard layout:', handoversRenterError)
+  }  
+  const { data: Booking, error: bookingsError } = await supabase
+    .from('rental_handovers')
+    .select('*')
+    .eq('renting_user_id', user.id)
+    .eq("payment_status", null)
+
+
+  if (bookingsError) {
+    console.error('Supabase error fetching handovers for dashboard layout:', bookingsError)
   }
   const listings = listingsData ?? []
   const handovers = handoversData ?? []
   const Renting = handoversRenterData ?? []
-  console.log(Renting)
+  const booking= Booking ?? []
+
 
   return (
     <div className="flex ">
@@ -55,10 +67,11 @@ const DashboardLayout = async ({
           listings: Array.isArray(listings) ? listings.length : 0,
           requests: Array.isArray(handovers) ? handovers.length : 0,
           rentings: Array.isArray(Renting) ? Renting.length : 0,
+          bookings: Array.isArray(booking) ? booking.length : 0,
         }}
         />
 
-      <main className="flex-1 lg:ml-60	 overflow-y-auto">
+      <main className="flex-1 lg:ml-60 overflow-y-auto">
         {children}
       </main>
     </div>
